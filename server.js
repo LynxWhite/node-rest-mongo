@@ -3,6 +3,7 @@ const app = express()
 const port = process.env.PORT || 1337
 const mongoose = require('mongoose')
 const Faculty = require('./api/models/timetableModel')
+const Admins = require('./api/models/adminsModel')
 const bodyParser = require('body-parser')
 
 // mongoose instance connection url connection
@@ -12,7 +13,7 @@ mongoose.connect('mongodb://localhost/TimeTabledb', { useMongoClient: true });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const routes = require('./api/routes/openTimetableRoutes')
+const routes = require('./api/routes/Routes')
 routes(app)
 
 app.use(function(req, res) {
