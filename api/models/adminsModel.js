@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const AdminSchema = new Schema({
     login: {
         type: String,
+        unique: true,
         required: 'enter admin login',
     },
     pass: {
