@@ -20,7 +20,7 @@ exports.create_an_admin = (req, res) => {
             if (err){res.sendStatus(500)}
             else {
                 new_admin.pass = hash
-                new_admin.save(function (err) {
+                new_admin.save(err => {
                     if (err) { res.sendStatus(500)}
                     else {
                         res.sendStatus(201)
