@@ -10,6 +10,7 @@ const AdminSchema = new Schema({
     },
     pass: {
         type: String,
+        select: false,
         required: 'enter admin pass',
     },
     faculty: {

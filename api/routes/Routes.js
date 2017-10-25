@@ -15,4 +15,8 @@ module.exports = (app) => {
 
     app.route('/admin')
         .post(admins.create_an_admin);
+    app.route('/login')
+        .get(admins.admin_login);
+    app.route('/account')
+        .get(admins.admin_account);
 }

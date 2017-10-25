@@ -8,7 +8,11 @@ const bodyParser = require('body-parser')
 
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/TimeTabledb', { useMongoClient: true }); 
+
+const db_url = process.env.MONGODB_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/TimeTabledb'
+mongoose.connect(db_url, { useMongoClient: true }, function(){
+    console.log('MongoDB connected sucessfully')
+})
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
