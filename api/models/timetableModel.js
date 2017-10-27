@@ -15,4 +15,18 @@ const FacultySchema = new Schema({
     }
 });
 
+const DirectionSchema = new Schema({
+    name: {
+        type: String
+    },
+    number: {
+        type: Number,
+    },
+    faculty: {
+        type: Schema.Types.ObjectId,
+        ref: 'Faculty',
+    },
+});
+
 module.exports = mongoose.model('Faculty', FacultySchema);
+module.exports = mongoose.model('Direction', DirectionSchema);
