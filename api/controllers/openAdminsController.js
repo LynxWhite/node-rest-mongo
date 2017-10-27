@@ -32,7 +32,6 @@ exports.create_an_admin = (req, res) => {
 }
 
 exports.admin_account = (req, res) => {
-    if (!req.headers['x-auth']) { return res.sendStatus(401)}
     const login = jwt.decode(req.headers['x-auth'], config.secretkey).login
     Admin.findOne({login: login}, (err, user) => {
         if (err) { 
@@ -46,12 +45,12 @@ exports.admin_account = (req, res) => {
 }
 
 exports.admin_login = (req, res) => {
-    if (!req.query.login || !req.query.pass) {
+    if (!req.body.login || !req.body.pass) {
         return res.sendStatus(400) 
     } else {
-        const login = req.query.login;
-        const password = req.query.pass;
-        Admin.findOne({login: req.query.login})
+        const login = req.body.login;
+        const password = req.body.pass;
+        Admin.findOne({login: login})
             .select('pass') 
             .exec((err, user) => {
                 if (err) {
@@ -64,7 +63,7 @@ exports.admin_login = (req, res) => {
                     }
                     if (!valid){ return res.sendStatus(401)}
                     var token = jwt.encode({login: login}, config.secretkey)
-                    res.send(token)
+                    res.send({token})
                 })
             })
     }
