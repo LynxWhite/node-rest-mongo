@@ -32,6 +32,12 @@ exports.create_an_admin = (req, res) => {
 }
 
 exports.admin_account = (req, res) => {
+    if (!req.headers['x-auth']) { return res.sendStatus(401)}
+    try {
+        const login = jwt.decode(req.headers['x-auth'], config.secretkey).login;
+    } catch (err) {
+        return res.sendStatus(400);
+    }
     const login = jwt.decode(req.headers['x-auth'], config.secretkey).login
     Admin.findOne({login: login}, (err, user) => {
         if (err) { 
