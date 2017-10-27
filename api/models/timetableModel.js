@@ -43,3 +43,4 @@ const СourseSchema = new Schema({
 
 module.exports = mongoose.model('Faculty', FacultySchema);
 module.exports = mongoose.model('Direction', DirectionSchema);
+module.exports = mongoose.model('Course', СourseSchema);
