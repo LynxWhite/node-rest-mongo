@@ -31,7 +31,7 @@ module.exports = (app) => {
         
         app.route('/teachers/:teacherId')
             .get(teachers.read_a_teacher)
-            .put(directions.update_a_teacher)
+            .put(teachers.update_a_teacher)
             .delete(teachers.delete_a_teacher);
 //subject           
     app.route('/subjects')
