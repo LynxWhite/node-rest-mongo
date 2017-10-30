@@ -19,14 +19,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-    if (req.method === 'POST' && req.originalUrl !== '/login') {
-        if (!req.headers['x-auth']) { return res.sendStatus(401)}
-        try {
-            const login = jwt.decode(req.headers['x-auth'], config.secretkey).login;
-        } catch (err) {
-            return res.sendStatus(400);
-        }
-    }
+    // if (req.method === 'POST' && req.originalUrl !== '/login') {
+    //     if (!req.headers['x-auth']) { return res.sendStatus(401)}
+    //     try {
+    //         const login = jwt.decode(req.headers['x-auth'], config.secretkey).login;
+    //     } catch (err) {
+    //         return res.sendStatus(400);
+    //     }
+    // }
     res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type, x-auth');
