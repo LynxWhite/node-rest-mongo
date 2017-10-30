@@ -58,6 +58,11 @@ const СourseSchema = new Schema({
     },
 });
 
+/* 
+Преподаватель:
+ - Фамилия Имя Отчество
+ - Предметы
+*/
 const TeacherSchema = new Schema({
     fio: {
         type: String,
@@ -66,12 +71,26 @@ const TeacherSchema = new Schema({
     subjects: [{ type : Schema.Types.ObjectId, ref: 'Subject' }],
 });
 
+
+/* 
+Предмет:
+ - Название
+*/
 const SubjectSchema = new Schema({
     name: {
         type: String,
     },
 });
 
+
+/* 
+Аудитория:
+ - Номер
+ - Вместимость
+ - Есть ли проектор
+ - Есть ли компьютер
+ - Достает ли ВайФай
+*/
 const AuditorySchema = new Schema({
     number: {
         type: String,

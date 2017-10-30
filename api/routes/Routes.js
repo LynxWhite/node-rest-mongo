@@ -5,8 +5,9 @@ module.exports = (app) => {
     const teachers = require('../controllers/teacherController');
     const subjects = require('../controllers/subjectController');
     const admins = require('../controllers/adminController');
-    const directions = require('../controllers/openDirectionsController')   
+    const directions = require('../controllers/directionController') 
 
+//faculty 
     app.route('/faculties')
         .get(faculties.list_all_faculties)
         .post(faculties.create_a_faculty);
@@ -18,7 +19,7 @@ module.exports = (app) => {
         app.route('/faculties/:facultyId/directions')
             .get(directions.list_all_directions_in_faculty)
             .post(directions.create_a_direction)
-    
+//direction 
     app.route('/direction/:directionId')
         .get(directions.read_a_direction)
         .put(directions.update_a_direction)
@@ -30,6 +31,7 @@ module.exports = (app) => {
         
         app.route('/teachers/:teacherId')
             .get(teachers.read_a_teacher)
+            .put(directions.update_a_teacher)
             .delete(teachers.delete_a_teacher);
 //subject           
     app.route('/subjects')
