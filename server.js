@@ -17,7 +17,7 @@ mongoose.connect(db_url, { useMongoClient: true }, () => {
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+/*
 app.use((req, res, next) => {
     if (req.method === 'POST' && req.originalUrl !== '/login') {
         if (!req.headers['x-auth']) { return res.sendStatus(401)}
@@ -33,7 +33,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
-
+*/
 const routes = require('./api/routes/Routes')
 routes(app)
 

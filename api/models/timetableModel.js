@@ -1,7 +1,12 @@
 'use strict';
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
+/* 
+Факультет:
+ - Название
+ - Аббривеатура
+ - Ключ (абривеатура на английском)
+*/
 const FacultySchema = new Schema({
     name: {
         type: String
@@ -15,6 +20,12 @@ const FacultySchema = new Schema({
     }
 });
 
+/*
+Направление:
+ - Название направления
+ - Номер направления
+ - Факультет (id)
+*/
 const DirectionSchema = new Schema({
     name: {
         type: String
@@ -28,6 +39,12 @@ const DirectionSchema = new Schema({
     },
 });
 
+/* 
+Курс:
+ - Номер курса
+ - тип (бакалавриат/магистратура/специалитет)
+ - Направление (id)
+*/
 const СourseSchema = new Schema({
     number: {
         type: Number,
