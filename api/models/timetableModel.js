@@ -135,6 +135,7 @@ const TimeSchema = new Schema({
  - подгруппа (first/second/all)
  - аудитория 
  - предмет
+ - курс
 */
 const CellSchema = new Schema({
     time: {
@@ -156,6 +157,11 @@ const CellSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Subject',
     },
+    course: {
+        type: Schema.Types.ObjectId,
+        ref: 'Course',
+    }
+
 });
 
 module.exports = mongoose.model('Faculty', FacultySchema);
