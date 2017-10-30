@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 /* 
 Факультет:
  - Название
- - Аббривеатура
- - Ключ (абривеатура на английском)
+ - Аббревиатура
+ - Ключ (абревиатура на английском)
 */
 const FacultySchema = new Schema({
     name: {
@@ -113,9 +113,56 @@ const AuditorySchema = new Schema({
     },
 });
 
+/*
+Время
+ - время 
+ - факультет
+*/
+const TimeSchema = new Schema({
+    name: {
+        type: String,
+    },
+    faculty: {
+        type: Schema.Types.ObjectId,
+        ref: 'Faculty',
+    },
+});
+
+/*
+Ячейка расписания:
+ - время 
+ - день 
+ - подгруппа (first/second/all)
+ - аудитория 
+ - предмет
+*/
+const CellSchema = new Schema({
+    time: {
+        type: Schema.Types.ObjectId,
+        ref: 'Time',
+    },
+    day: {
+        type: String,
+    },
+    subgroup: {
+        type: String,
+        default: 'all',
+    },
+    auditory: {
+        type: Schema.Types.ObjectId,
+        ref: 'Auditory',
+    },
+    subject: {
+        type: Schema.Types.ObjectId,
+        ref: 'Subject',
+    },
+});
+
 module.exports = mongoose.model('Faculty', FacultySchema);
 module.exports = mongoose.model('Direction', DirectionSchema);
 module.exports = mongoose.model('Course', СourseSchema);
 module.exports = mongoose.model('Teacher', TeacherSchema);
 module.exports = mongoose.model('Subject', SubjectSchema);
 module.exports = mongoose.model('Auditory', AuditorySchema);
+module.exports = mongoose.model('Time', TimeSchema);
+module.exports = mongoose.model('Cell', CellSchema);
