@@ -16,7 +16,7 @@ const FacultySchema = new Schema({
     },
     abbr_key: {
         type: String,
-        required: 'enter faculty en name or abbr'
+        required: true,
     }
 });
 
@@ -58,6 +58,45 @@ const СourseSchema = new Schema({
     },
 });
 
+const TeacherSchema = new Schema({
+    fio: {
+        type: String,
+        unique: true,
+    },
+    subjects: [{ type : Schema.Types.ObjectId, ref: 'Subject' }],
+});
+
+const SubjectSchema = new Schema({
+    name: {
+        type: String,
+    },
+});
+
+const AuditorySchema = new Schema({
+    number: {
+        type: String,
+        required: true,
+    },
+    capacity: {
+        type: Number,
+    },
+    projector: {
+        type: Boolean,
+        default: false,
+    },
+    computer: {
+        type: Boolean,
+        default: false,
+    },
+    wifi: {
+        type: Boolean,
+        default: false,
+    },
+});
+
 module.exports = mongoose.model('Faculty', FacultySchema);
 module.exports = mongoose.model('Direction', DirectionSchema);
 module.exports = mongoose.model('Course', СourseSchema);
+module.exports = mongoose.model('Teacher', TeacherSchema);
+module.exports = mongoose.model('Subject', SubjectSchema);
+module.exports = mongoose.model('Auditory', AuditorySchema);
