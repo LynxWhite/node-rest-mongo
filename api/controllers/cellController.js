@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose');
 const Cell = mongoose.model('Cell');
+const Course = mongoose.model('Course');
 
 exports.list_all_cells = (req, res) => {
     Cell.find({}, (err, cell) => {
@@ -9,6 +10,16 @@ exports.list_all_cells = (req, res) => {
             res.send(err);
         res.json(cell);
     })
+};
+
+exports.list_all_cells_in_course = (req, res) => {
+    Course.find({_id: req.params.courseId})
+        .populate('cells')
+        .exec(function (err, cells) {
+            if (err)
+                res.send(err);
+            res.json(cells);
+        })
 };
 
 exports.create_a_cell = (req, res) => {

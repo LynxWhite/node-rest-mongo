@@ -15,7 +15,6 @@ exports.list_all_courses_in_direction = (req, res) => {
         })
 };
 
-
 exports.create_a_course = (req, res) => {
     const new_course = new Course(req.body);
     new_course.save((err, course) => {
