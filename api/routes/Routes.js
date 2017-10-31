@@ -5,7 +5,9 @@ module.exports = (app) => {
     const teachers = require('../controllers/teacherController');
     const subjects = require('../controllers/subjectController');
     const admins = require('../controllers/adminController');
-    const directions = require('../controllers/directionController') 
+    const directions = require('../controllers/directionController');
+    const auditories = require('../controllers/auditoryController');
+    const courses = require('../controllers/courseController');
 
 //faculty 
     app.route('/faculties')
@@ -42,6 +44,24 @@ module.exports = (app) => {
             .get(subjects.read_a_subject)
             .put(subjects.update_a_subject)
             .delete(subjects.delete_a_subject);
+//course           
+    app.route('/courses')
+        .get(courses.list_all_courses)
+        .post(courses.create_a_course);
+        
+        app.route('/courses/:courseId')
+            .get(courses.read_a_course)
+            .put(courses.update_a_course)
+            .delete(courses.delete_a_course);
+//auditory           
+    app.route('/auditories')
+        .get(auditories.list_all_auditories)
+        .post(auditories.create_a_auditory);
+
+        app.route('/auditories/:auditoryId')
+            .get(auditories.read_a_auditory)
+            .put(auditories.update_a_auditory)
+            .delete(auditories.delete_a_auditory);
 //admin
     app.route('/admin')
         .post(admins.create_an_admin);

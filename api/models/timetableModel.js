@@ -1,6 +1,7 @@
 'use strict';
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+
 /* 
 Факультет:
  - Название
@@ -17,7 +18,7 @@ const FacultySchema = new Schema({
     abbr_key: {
         type: String,
         required: true,
-    }
+    },
 });
 
 /*
@@ -61,7 +62,7 @@ const СourseSchema = new Schema({
 /* 
 Преподаватель:
  - Фамилия Имя Отчество
- - Предметы
+ - Предметы (id)
 */
 const TeacherSchema = new Schema({
     fio: {
@@ -81,7 +82,6 @@ const SubjectSchema = new Schema({
         type: String,
     },
 });
-
 
 /* 
 Аудитория:
@@ -114,33 +114,44 @@ const AuditorySchema = new Schema({
 });
 
 /*
-Время
- - время 
- - факультет
+Ячейка расписания:
+ - учитель (id)
+ - предмет (id)
+ - факультет (id)
+ - направление (id)
+ - курс (id)
+ - аудитория (id)
+ - время
+ - день
+ - подгруппа (first/second/all)
 */
-const TimeSchema = new Schema({
-    name: {
-        type: String,
+const CellSchema = new Schema({
+    teacher: {
+        type: Schema.Types.ObjectId,
+        ref: 'Teacher',
+    },
+    subject: {
+        type: Schema.Types.ObjectId,
+        ref: 'Subject',
     },
     faculty: {
         type: Schema.Types.ObjectId,
         ref: 'Faculty',
     },
-});
-
-/*
-Ячейка расписания:
- - время 
- - день 
- - подгруппа (first/second/all)
- - аудитория 
- - предмет
- - курс
-*/
-const CellSchema = new Schema({
-    time: {
+    direction: {
         type: Schema.Types.ObjectId,
-        ref: 'Time',
+        ref: 'Direction',
+    },
+    course: {
+        type: Schema.Types.ObjectId,
+        ref: 'Course',
+    },
+    auditory: {
+        type: Schema.Types.ObjectId,
+        ref: 'Auditory',
+    },
+    time: {
+        type: String,
     },
     day: {
         type: String,
@@ -149,19 +160,6 @@ const CellSchema = new Schema({
         type: String,
         default: 'all',
     },
-    auditory: {
-        type: Schema.Types.ObjectId,
-        ref: 'Auditory',
-    },
-    subject: {
-        type: Schema.Types.ObjectId,
-        ref: 'Subject',
-    },
-    course: {
-        type: Schema.Types.ObjectId,
-        ref: 'Course',
-    }
-
 });
 
 module.exports = mongoose.model('Faculty', FacultySchema);
@@ -170,5 +168,4 @@ module.exports = mongoose.model('Course', СourseSchema);
 module.exports = mongoose.model('Teacher', TeacherSchema);
 module.exports = mongoose.model('Subject', SubjectSchema);
 module.exports = mongoose.model('Auditory', AuditorySchema);
-module.exports = mongoose.model('Time', TimeSchema);
 module.exports = mongoose.model('Cell', CellSchema);
