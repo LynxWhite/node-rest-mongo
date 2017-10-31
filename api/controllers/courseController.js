@@ -2,24 +2,22 @@
 
 const mongoose = require('mongoose');
 const Course = mongoose.model('Course');
+const Direction = mongoose.model('Direction');
 
 
-exports.list_all_courses = (req, res) => {
-    Course.find({}, (err, course) => {
-        if (err)
-            res.send(err);
-        res.json(course);
-    })
+exports.list_all_courses_in_direction = (req, res) => {
+    Direction.find({_id: req.params.directionId})
+        .populate('courses')
+        .exec(function (err, courses) {
+            if (err)
+                res.send(err);
+            res.json(courses);
+        })
 };
 
 
 exports.create_a_course = (req, res) => {
-    const data = {
-        number: req.body.number,
-        type: req.body.type,
-        direction: req.params.directionId
-    }
-    const new_course = new Course(data);
+    const new_course = new Course(req.body);
     new_course.save((err, course) => {
         if (err)
             res.send(err);

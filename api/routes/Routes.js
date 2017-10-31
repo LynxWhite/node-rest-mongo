@@ -20,12 +20,25 @@ module.exports = (app) => {
             .delete(faculties.delete_a_faculty);
         app.route('/faculties/:facultyId/directions')
             .get(directions.list_all_directions_in_faculty)
-            .post(directions.create_a_direction)
 //direction 
-    app.route('/direction/:directionId')
-        .get(directions.read_a_direction)
-        .put(directions.update_a_direction)
-        .delete(directions.delete_a_direction);
+    app.route('/directions')
+        .post(directions.create_a_direction)
+
+        app.route('/direction/:directionId')
+            .get(directions.read_a_direction)
+            .put(directions.update_a_direction)
+            .delete(directions.delete_a_direction);
+
+        app.route('directions/:directionId/courses')
+            .get(courses.list_all_courses_in_direction)
+//course           
+    app.route('/courses')
+        .post(courses.create_a_course);
+
+        app.route('/courses/:courseId')
+            .get(courses.read_a_course)
+            .put(courses.update_a_course)
+            .delete(courses.delete_a_course);
 //teacher           
     app.route('/teachers')
         .get(teachers.list_all_teachers)
@@ -44,15 +57,6 @@ module.exports = (app) => {
             .get(subjects.read_a_subject)
             .put(subjects.update_a_subject)
             .delete(subjects.delete_a_subject);
-//course           
-    app.route('/courses')
-        .get(courses.list_all_courses)
-        .post(courses.create_a_course);
-        
-        app.route('/courses/:courseId')
-            .get(courses.read_a_course)
-            .put(courses.update_a_course)
-            .delete(courses.delete_a_course);
 //auditory           
     app.route('/auditories')
         .get(auditories.list_all_auditories)

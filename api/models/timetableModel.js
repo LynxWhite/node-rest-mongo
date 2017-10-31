@@ -2,12 +2,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-/* 
-Факультет:
- - Название
- - Аббревиатура
- - Ключ (абревиатура на английском)
-*/
 const FacultySchema = new Schema({
     name: {
         type: String
@@ -19,14 +13,12 @@ const FacultySchema = new Schema({
         type: String,
         required: true,
     },
+    directions: {
+        type: Schema.Types.ObjectId,
+        ref: [{ type : Schema.Types.ObjectId, ref: 'Direction' }],
+    },
 });
 
-/*
-Направление:
- - Название направления
- - Номер направления
- - Факультет (id)
-*/
 const DirectionSchema = new Schema({
     name: {
         type: String
@@ -34,18 +26,12 @@ const DirectionSchema = new Schema({
     number: {
         type: Number,
     },
-    faculty: {
+    courses: {
         type: Schema.Types.ObjectId,
-        ref: 'Faculty',
-    },
+        ref: [{ type : Schema.Types.ObjectId, ref: 'Course' }],
+    }
 });
 
-/* 
-Курс:
- - Номер курса
- - тип (бакалавриат/магистратура/специалитет)
- - Направление (id)
-*/
 const СourseSchema = new Schema({
     number: {
         type: Number,
@@ -53,17 +39,12 @@ const СourseSchema = new Schema({
     type: {
         type: String,
     },
-    direction: {
+    cells: {
         type: Schema.Types.ObjectId,
-        ref: 'Direction',
+        ref: [{ type : Schema.Types.ObjectId, ref: 'Cell' }],
     },
 });
 
-/* 
-Преподаватель:
- - Фамилия Имя Отчество
- - Предметы (id)
-*/
 const TeacherSchema = new Schema({
     fio: {
         type: String,
@@ -72,25 +53,12 @@ const TeacherSchema = new Schema({
     subjects: [{ type : Schema.Types.ObjectId, ref: 'Subject' }],
 });
 
-
-/* 
-Предмет:
- - Название
-*/
 const SubjectSchema = new Schema({
     name: {
         type: String,
     },
 });
 
-/* 
-Аудитория:
- - Номер
- - Вместимость
- - Есть ли проектор
- - Есть ли компьютер
- - Достает ли ВайФай
-*/
 const AuditorySchema = new Schema({
     number: {
         type: String,
@@ -113,18 +81,6 @@ const AuditorySchema = new Schema({
     },
 });
 
-/*
-Ячейка расписания:
- - учитель (id)
- - предмет (id)
- - факультет (id)
- - направление (id)
- - курс (id)
- - аудитория (id)
- - время
- - день
- - подгруппа (first/second/all)
-*/
 const CellSchema = new Schema({
     teacher: {
         type: Schema.Types.ObjectId,
@@ -133,18 +89,6 @@ const CellSchema = new Schema({
     subject: {
         type: Schema.Types.ObjectId,
         ref: 'Subject',
-    },
-    faculty: {
-        type: Schema.Types.ObjectId,
-        ref: 'Faculty',
-    },
-    direction: {
-        type: Schema.Types.ObjectId,
-        ref: 'Direction',
-    },
-    course: {
-        type: Schema.Types.ObjectId,
-        ref: 'Course',
     },
     auditory: {
         type: Schema.Types.ObjectId,
