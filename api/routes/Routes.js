@@ -26,9 +26,11 @@ module.exports = (app) => {
             .get(faculties.read_a_faculty)
             .put(faculties.update_a_faculty)
             .delete(faculties.delete_a_faculty);
-        app.route('/faculties/:facultyId/directions')
+        app.route('/faculties/:facultyId/:type')
             .get(directions.list_all_directions_in_faculty)
 //direction 
+    app.route('/directions/:facultyId/:type')
+        .get(directions.list_all_directions_in_faculty)
     app.route('/directions')
         .post(directions.create_a_direction)
 

@@ -26,6 +26,9 @@ const DirectionSchema = new Schema({
     type: {
         type: String,
     },
+    abbr: {
+        type: String,
+    },
     courses: [{ type : Schema.Types.ObjectId, ref: 'Course' }],
 });
 

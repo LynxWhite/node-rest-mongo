@@ -55,12 +55,11 @@ exports.get_timetable = (req, res) => {
                     dirs.forEach(dir => {
                         const type = dir.courses.filter(dir => (dir.number === Number(course)));
                         for(let i = 0; i<=5; i++) {
-                            let dirCell = '';
                             if (type[0]) {
-                                dirCell = type[0].cells.filter(cell => (cell.day === day && cell.time === i));
+                                let dirCell = type[0].cells.filter(cell => (cell.day === day && cell.time === i));
+                                dirCell = (dirCell.length === 0 ? [null] : dirCell);
+                                list[i] = [...list[i], ...dirCell];
                             }
-                            dirCell = (dirCell.length === 0 ? [null] : dirCell);
-                            list[i] = [...list[i], ...dirCell];
                         }
                     });
                     array[day] = list;
