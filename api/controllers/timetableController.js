@@ -26,7 +26,18 @@ exports.get_timetable = (req, res) => {
                 populate: { 
                     path: 'cells',
                     populate: {
-                        path: 'lessons'
+                        path: 'lessons',
+                        populate: [
+                            {
+                                path: 'auditory'
+                            },
+                            {
+                                path: 'subject'
+                            },
+                            {
+                                path: 'auditory'
+                            },
+                        ]
                     }
                 }
             }
@@ -34,22 +45,27 @@ exports.get_timetable = (req, res) => {
         .exec(function (err, fac) {
             if (err)
                 res.send(err);
-            const dirs = fac[0].directions.filter(elem => (elem.type === type));
-            days.forEach(day => {
-                const list = {};
-                for (let i = 0; i<=5; i++) {
-                    list[i] = [times[i].time];
-                }
-                dirs.forEach(dir => {
-                    const type = dir.courses.filter(dir => (dir.number === Number(course)));
-                    for(let i = 0; i<=5; i++) {
-                        let dirCell = type[0].cells.filter(cell => (cell.day === day && cell.time === i));
-                        dirCell = (dirCell.length === 0 ? [null] : dirCell);
-                        list[i] = [...list[i], ...dirCell];
+            if (fac[0]) {
+                const dirs = fac[0].directions.filter(elem => (elem.type === type));
+                days.forEach(day => { 
+                    const list = {};
+                    for (let i = 0; i<=5; i++) {
+                        list[i] = [times[i].time];
                     }
-                });
-                array[day] = list;
-            })
-            res.send(array);
+                    dirs.forEach(dir => {
+                        const type = dir.courses.filter(dir => (dir.number === Number(course)));
+                        for(let i = 0; i<=5; i++) {
+                            let dirCell = '';
+                            if (type[0]) {
+                                dirCell = type[0].cells.filter(cell => (cell.day === day && cell.time === i));
+                            }
+                            dirCell = (dirCell.length === 0 ? [null] : dirCell);
+                            list[i] = [...list[i], ...dirCell];
+                        }
+                    });
+                    array[day] = list;
+                })
+                res.send(array);
+            } else res.send('Факультет не найден');
         })
 };
