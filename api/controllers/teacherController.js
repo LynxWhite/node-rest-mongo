@@ -13,11 +13,7 @@ exports.list_all_teachers = (req, res) => {
 };
 
 exports.create_a_teacher = (req, res) => {
-    const {fio, subjects} = req.body;
-    const new_teacher = new Teacher({
-        fio,
-        subjects,
-    });
+    const new_teacher = new Teacher(req.body);
     new_teacher.save((err, teacher) => {
         if (err)
             res.send(err);

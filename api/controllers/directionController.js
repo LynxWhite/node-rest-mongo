@@ -10,7 +10,7 @@ exports.list_all_directions_in_faculty = (req, res) => {
         .exec(function (err, directions) {
             if (err)
                 res.send(err);
-            res.json(direction);
+            res.json(directions);
         })
 };
 

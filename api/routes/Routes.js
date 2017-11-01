@@ -9,6 +9,13 @@ module.exports = (app) => {
     const auditories = require('../controllers/auditoryController');
     const courses = require('../controllers/courseController');
     const cells = require('../controllers/cellController');
+    const lessons = require('../controllers/lessonController');
+    const times = require('../controllers/timeController');
+    const timetable = require('../controllers/timetableController');
+
+//timetable
+    app.route('/timetable/:facultyId/:course/:type')
+        .get(timetable.get_timetable);
 
 //faculty 
     app.route('/faculties')
@@ -51,6 +58,17 @@ module.exports = (app) => {
             .get(cells.read_a_cell)
             .put(cells.update_a_cell)
             .delete(cells.delete_a_cell);
+        
+        app.route('/cells/:cellId/lessons')
+            .get(lessons.list_all_lessons_in_cell)
+//lesson         
+    app.route('/lessons')
+        .post(lessons.create_a_lesson);
+
+        app.route('/lessons/:lessonId')
+            .get(lessons.read_a_lesson)
+            .put(lessons.update_a_lesson)
+            .delete(lessons.delete_a_lesson);
 //teacher           
     app.route('/teachers')
         .get(teachers.list_all_teachers)
@@ -78,6 +96,15 @@ module.exports = (app) => {
             .get(auditories.read_a_auditory)
             .put(auditories.update_a_auditory)
             .delete(auditories.delete_a_auditory);
+
+//time           
+    app.route('/times')
+        .post(times.create_a_time);
+
+        app.route('/times/:facultyId')
+            .get(times.list_all_times_by_faculty)
+        app.route('/times/:timeId')
+            .get(times.read_a_time)
 //admin
     app.route('/admin')
         .post(admins.create_an_admin);

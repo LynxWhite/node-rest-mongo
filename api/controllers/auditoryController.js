@@ -42,6 +42,6 @@ exports.delete_a_auditory = (req, res) => {
     }, (err, auditory) => {
         if (err) 
             res.send(err);
-        res.json({message: 'Предмет удалён'});
+        res.json({message: 'Аудитория удалёна'});
     })
 };

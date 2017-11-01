@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const Cell = mongoose.model('Cell');
 const Course = mongoose.model('Course');
 
+
+
 exports.list_all_cells = (req, res) => {
     Cell.find({}, (err, cell) => {
         if (err)
@@ -53,6 +55,6 @@ exports.delete_a_cell = (req, res) => {
     }, (err, cell) => {
         if (err) 
             res.send(err);
-        res.json({message: 'Предмет удалён'});
+        res.json({message: 'Ячейка удалёна'});
     })
 };
