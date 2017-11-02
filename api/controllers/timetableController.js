@@ -11,6 +11,16 @@ const Time = mongoose.model('Time');
 
 const array = {};
 
+
+exports.create_lesson = (req, res) => {
+    const new_lesson = new Lesson(req.body);
+    new_lesson.save((err, lesson) => {
+        if (err)
+            res.send(err);
+        res.json(lesson);
+    })
+}
+
 exports.get_timetable = (req, res) => {
     const {facultyId, course, type} = req.params;
     const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
@@ -35,7 +45,7 @@ exports.get_timetable = (req, res) => {
                                 path: 'subject'
                             },
                             {
-                                path: 'auditory'
+                                path: 'teacher'
                             },
                         ]
                     }
@@ -57,7 +67,7 @@ exports.get_timetable = (req, res) => {
                         for(let i = 0; i<=5; i++) {
                             if (type[0]) {
                                 let dirCell = type[0].cells.filter(cell => (cell.day === day && cell.time === i));
-                                dirCell = (dirCell.length === 0 ? [null] : dirCell);
+                                dirCell = (dirCell.length === 0 ? [{day: day, time: i}] : dirCell);
                                 list[i] = [...list[i], ...dirCell];
                             }
                         }

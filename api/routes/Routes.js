@@ -64,13 +64,10 @@ module.exports = (app) => {
         app.route('/cells/:cellId/lessons')
             .get(lessons.list_all_lessons_in_cell)
 //lesson         
-    app.route('/lessons')
-        .post(lessons.create_a_lesson);
-
-        app.route('/lessons/:lessonId')
-            .get(lessons.read_a_lesson)
-            .put(lessons.update_a_lesson)
-            .delete(lessons.delete_a_lesson);
+    app.route('/lessons/:lessonId')
+        .get(lessons.read_a_lesson)
+        .put(lessons.update_a_lesson)
+        .delete(lessons.delete_a_lesson);
 //teacher           
     app.route('/teachers')
         .get(teachers.list_all_teachers)

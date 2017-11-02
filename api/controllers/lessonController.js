@@ -24,14 +24,6 @@ exports.list_all_lessons_in_cell = (req, res) => {
         })
 };
 
-exports.create_a_lesson = (req, res) => {
-    const new_lesson = new Lesson(req.body);
-    new_lesson.save((err, lesson) => {
-        if (err)
-            res.send(err);
-        res.json(lesson);
-    })
-}
 
 exports.read_a_lesson = (req, res) => {
     Lesson.findById(req.params.lessonId, (err, lesson) => {

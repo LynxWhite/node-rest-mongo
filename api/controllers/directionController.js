@@ -6,7 +6,7 @@ const Faculty = mongoose.model('Faculty');
 
 exports.list_all_directions_in_faculty = (req, res) => {
     Faculty.find({_id: req.params.facultyId})
-        .populate('directions', null, { type: { $gte: req.params.type }},)
+        .populate('directions', null, { type: req.params.type },)
         .exec(function (err, faculty) {
             if (err)
                 res.send(err);
