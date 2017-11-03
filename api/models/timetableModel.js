@@ -32,6 +32,9 @@ const TableSchema = new Schema({
             day: {
                 type: String,
             },
+            comment: {
+                type: String,
+            },
             lessons: [
                 {
                     teacher: {
@@ -104,6 +107,9 @@ const TeacherSchema = new Schema({
         unique: true,
     },
     position: {
+        type: String,
+    },
+    url: {
         type: String,
     },
     faculty: {
