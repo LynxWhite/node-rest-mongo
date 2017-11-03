@@ -47,8 +47,14 @@ const TableSchema = new Schema({
                         ref: 'Auditory',
                     },
                     subgroup: {
-                        name: String,
-                        default: 'all',
+                        name: {
+                            type: String,
+                            default: null,
+                        },
+                        position: {
+                            type: String,
+                            default: 'all',
+                        }
                     },
                     plus_minus: {
                         type: String,
