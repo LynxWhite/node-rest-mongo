@@ -2,6 +2,67 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const TableSchema = new Schema({
+    year: {
+        type: String
+    },
+    semester: {
+        type: String
+    },
+    course: {
+        type: Number,
+    },
+    group: {
+        type: String,
+    },
+    faculty: {
+        type: Schema.Types.ObjectId,
+        ref: 'Faculty',
+    },
+    direction: {
+        type: Schema.Types.ObjectId,
+        ref: 'Direction',
+    },
+    cells: [
+        {
+            time: {
+                type: Schema.Types.ObjectId,
+                ref: 'Time',
+            },
+            day: {
+                type: String,
+            },
+            lessons: [
+                {
+                    teacher: {
+                        type: Schema.Types.ObjectId,
+                        ref: 'Teacher',
+                    },
+                    subject: {
+                        type: Schema.Types.ObjectId,
+                        ref: 'Subject',
+                    },
+                    auditory: {
+                        type: Schema.Types.ObjectId,
+                        ref: 'Auditory',
+                    },
+                    subgroup: {
+                        name: String,
+                        default: 'all',
+                    },
+                    plus_minus: {
+                        type: String,
+                        default: '',
+                    },
+                    type: {
+                        type: String,
+                    }
+                }
+            ],
+        }
+    ]
+});
+
 const FacultySchema = new Schema({
     name: {
         type: String
@@ -9,19 +70,15 @@ const FacultySchema = new Schema({
     abbr: {
         type: String
     },
-    abbr_key: {
-        type: String,
-        required: true,
-    },
-    directions: [{ type : Schema.Types.ObjectId, ref: 'Direction' }],
 });
 
+
 const DirectionSchema = new Schema({
+    cipher: {
+        type: String,
+    },
     name: {
         type: String
-    },
-    number: {
-        type: Number,
     },
     type: {
         type: String,
@@ -29,14 +86,10 @@ const DirectionSchema = new Schema({
     abbr: {
         type: String,
     },
-    courses: [{ type : Schema.Types.ObjectId, ref: 'Course' }],
-});
-
-const СourseSchema = new Schema({
-    number: {
-        type: Number,
-    },
-    cells: [{ type : Schema.Types.ObjectId, ref: 'Cell' }],
+    faculty: {
+        type : Schema.Types.ObjectId, 
+        ref: 'Faculty'
+    }
 });
 
 const TeacherSchema = new Schema({
@@ -44,19 +97,35 @@ const TeacherSchema = new Schema({
         type: String,
         unique: true,
     },
-    subjects: [{ type : Schema.Types.ObjectId, ref: 'Subject' }],
+    position: {
+        type: String,
+    },
+    faculty: {
+        type : Schema.Types.ObjectId, 
+        ref: 'Faculty'
+    }
 });
 
 const SubjectSchema = new Schema({
     name: {
         type: String,
     },
+    faculty: {
+        type : Schema.Types.ObjectId, 
+        ref: 'Faculty'
+    }
 });
 
 const AuditorySchema = new Schema({
-    number: {
+    name: {
         type: String,
         required: true,
+    },
+    more_name: {
+        type: String,
+    },
+    housing: {
+        type: String,
     },
     capacity: {
         type: Number,
@@ -69,44 +138,7 @@ const AuditorySchema = new Schema({
         type: Boolean,
         default: false,
     },
-    wifi: {
-        type: Boolean,
-        default: false,
-    },
 });
-
-const CellSchema = new Schema({
-    time: {
-        type: Number,
-    },
-    day: {
-        type: String,
-    },
-    lessons: [{ type : Schema.Types.ObjectId, ref: 'Lesson' }],
-});
-
-const LessonSchema = new Schema({
-    teacher: {
-        type: Schema.Types.ObjectId,
-        ref: 'Teacher',
-    },
-    subject: {
-        type: Schema.Types.ObjectId,
-        ref: 'Subject',
-    },
-    auditory: {
-        type: Schema.Types.ObjectId,
-        ref: 'Auditory',
-    },
-    subgroup: {
-        type: String,
-        default: 'all',
-    },
-    plus_minus: {
-        type: String,
-        default: '',
-    }
-})
 
 const TimeSchema = new Schema({
     time: {
@@ -118,12 +150,10 @@ const TimeSchema = new Schema({
     },
 })
 
+module.exports = mongoose.model('Table', TableSchema);
 module.exports = mongoose.model('Faculty', FacultySchema);
 module.exports = mongoose.model('Direction', DirectionSchema);
-module.exports = mongoose.model('Course', СourseSchema);
 module.exports = mongoose.model('Teacher', TeacherSchema);
 module.exports = mongoose.model('Subject', SubjectSchema);
 module.exports = mongoose.model('Auditory', AuditorySchema);
-module.exports = mongoose.model('Cell', CellSchema);
-module.exports = mongoose.model('Lesson', LessonSchema);
 module.exports = mongoose.model('Time', TimeSchema);
