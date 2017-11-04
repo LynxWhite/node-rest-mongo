@@ -12,7 +12,7 @@ const TableSchema = new Schema({
     course: {
         type: Number,
     },
-    group: {
+    groupName: {
         type: String,
     },
     faculty: {
@@ -23,6 +23,11 @@ const TableSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Direction',
     },
+    subgroups: [
+        {
+            type: String,
+        },
+    ],
     cells: [
         {
             time: {
@@ -50,14 +55,8 @@ const TableSchema = new Schema({
                         ref: 'Auditory',
                     },
                     subgroup: {
-                        name: {
-                            type: String,
-                            default: null,
-                        },
-                        position: {
-                            type: String,
-                            default: 'all',
-                        }
+                        type: Number,
+                        default: 0,
                     },
                     plus_minus: {
                         type: String,
@@ -83,13 +82,16 @@ const FacultySchema = new Schema({
 
 
 const DirectionSchema = new Schema({
-    cipher: {
+    code: {
         type: String,
     },
     name: {
         type: String
     },
-    type: {
+    level: {
+        type: String,
+    },
+    profile: {
         type: String,
     },
     abbr: {
@@ -122,6 +124,9 @@ const SubjectSchema = new Schema({
     name: {
         type: String,
     },
+    abbr: {
+        type: String,
+    },
     faculty: {
         type : Schema.Types.ObjectId, 
         ref: 'Faculty'
@@ -133,7 +138,7 @@ const AuditorySchema = new Schema({
         type: String,
         required: true,
     },
-    more_name: {
+    extraName: {
         type: String,
     },
     housing: {
