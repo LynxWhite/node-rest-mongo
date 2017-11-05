@@ -6,6 +6,7 @@ const Faculty = require('./api/models/timetableModel')
 const Admins = require('./api/models/adminsModel')
 const bodyParser = require('body-parser')
 const config = require('./config')
+const jwt = require('jwt-simple')
 
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;

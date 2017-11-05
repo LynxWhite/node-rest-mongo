@@ -7,14 +7,13 @@ module.exports = (app) => {
     const admins = require('../controllers/adminController');
     const directions = require('../controllers/directionController');
     const auditories = require('../controllers/auditoryController');
-    const courses = require('../controllers/courseController');
-    const cells = require('../controllers/cellController');
-    const lessons = require('../controllers/lessonController');
     const times = require('../controllers/timeController');
     const timetable = require('../controllers/timetableController');
 
 //timetable
-    app.route('/timetable/:facultyId/:course/:type')
+    app.route('/timetable/')
+        .post(timetable.create_table);
+    app.route('/timetable/:year/:semester/:faculty/:direction/:course/')
         .get(timetable.get_timetable);
 
 //faculty 
@@ -26,11 +25,9 @@ module.exports = (app) => {
             .get(faculties.read_a_faculty)
             .put(faculties.update_a_faculty)
             .delete(faculties.delete_a_faculty);
-        app.route('/faculties/:facultyId/:type')
-            .get(directions.list_all_directions_in_faculty)
 //direction 
-    app.route('/directions/:facultyId/:type')
-        .get(directions.list_all_directions_in_faculty)
+    app.route('/directions/:facultyId')
+        .get(directions.list_in_faculty)
     app.route('/directions')
         .post(directions.create_a_direction)
 
@@ -38,39 +35,10 @@ module.exports = (app) => {
             .get(directions.read_a_direction)
             .put(directions.update_a_direction)
             .delete(directions.delete_a_direction);
-
-        app.route('/directions/:directionId/courses')
-            .get(courses.list_all_courses_in_direction)
-//course           
-    app.route('/courses')
-        .post(courses.create_a_course);
-
-        app.route('/courses/:courseId')
-            .get(courses.read_a_course)
-            .put(courses.update_a_course)
-            .delete(courses.delete_a_course);
-
-        app.route('/courses/:courseId/cells')
-            .get(cells.list_all_cells_in_course)
-//cell           
-    app.route('/cells')
-        .post(cells.create_a_cell);
-
-        app.route('/cells/:cellId')
-            .get(cells.read_a_cell)
-            .put(cells.update_a_cell)
-            .delete(cells.delete_a_cell);
-        
-        app.route('/cells/:cellId/lessons')
-            .get(lessons.list_all_lessons_in_cell)
-//lesson         
-    app.route('/lessons/:lessonId')
-        .get(lessons.read_a_lesson)
-        .put(lessons.update_a_lesson)
-        .delete(lessons.delete_a_lesson);
+            
 //teacher           
     app.route('/teachers')
-        .get(teachers.list_all_teachers)
+        .get(teachers.list_in_faculty)
         .post(teachers.create_a_teacher);
         
         app.route('/teachers/:teacherId')
@@ -79,7 +47,7 @@ module.exports = (app) => {
             .delete(teachers.delete_a_teacher);
 //subject           
     app.route('/subjects')
-        .get(subjects.list_all_subjects)
+        .get(subjects.list_in_faculty)
         .post(subjects.create_a_subject);
 
         app.route('/subjects/:subjectId')
@@ -88,7 +56,7 @@ module.exports = (app) => {
             .delete(subjects.delete_a_subject);
 //auditory           
     app.route('/auditories')
-        .get(auditories.list_all_auditories)
+        .get(auditories.list_in_housing)
         .post(auditories.create_a_auditory);
 
         app.route('/auditories/:auditoryId')

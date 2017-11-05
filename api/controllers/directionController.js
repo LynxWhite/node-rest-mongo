@@ -2,16 +2,14 @@
 
 const mongoose = require('mongoose');
 const Direction = mongoose.model('Direction');
-const Faculty = mongoose.model('Faculty');
 
-exports.list_all_directions_in_faculty = (req, res) => {
-    Faculty.find({_id: req.params.facultyId})
-        .populate('directions', null, { type: req.params.type },)
-        .exec(function (err, faculty) {
-            if (err)
-                res.send(err);
-            res.json(faculty[0].directions);
-        })
+
+exports.list_in_faculty = (req, res) => {
+    Direction.find({faculty: req.params.facultyId}, (err, direction) => {
+        if (err)
+            res.send(err);
+        res.json(direction);
+    })
 };
 
 exports.create_a_direction = (req, res) => {

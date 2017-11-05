@@ -4,16 +4,11 @@ const mongoose = require('mongoose');
 const Faculty = mongoose.model('Faculty');
 
 exports.list_all_faculties = (req, res) => {
-    Faculty.find({})
-        .populate('directions')
-        // .populate('courses')
-        // .populate('cells')
-        // .populate('lessons')
-        .exec(function (err, directions) {
-            if (err)
-                res.send(err);
-            res.json(directions);
-        })
+    Faculty.find({}, (err, faculty) => {
+        if (err)
+            res.send(err);
+        res.json(faculty);
+    })
 };
 
 exports.create_a_faculty = (req, res) => {

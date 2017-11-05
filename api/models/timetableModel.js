@@ -108,7 +108,7 @@ const TeacherSchema = new Schema({
         type: String,
         unique: true,
     },
-    position: {
+    post: {
         type: String,
     },
     url: {
@@ -140,6 +140,7 @@ const AuditorySchema = new Schema({
     },
     extraName: {
         type: String,
+        default: "None",
     },
     housing: {
         type: String,

@@ -2,10 +2,9 @@
 
 const mongoose = require('mongoose');
 const Teacher = mongoose.model('Teacher');
-const Subject = mongoose.model('Subject');
 
-exports.list_all_teachers = (req, res) => {
-    Teacher.find({}, (err, teacher) => {
+exports.list_in_faculty = (req, res) => {
+    Teacher.find({faculty: req.params.facultyId}, (err, teacher) => {
         if (err)
             res.send(err);
         res.json(teacher);

@@ -3,8 +3,8 @@
 const mongoose = require('mongoose');
 const Auditory = mongoose.model('Auditory');
 
-exports.list_all_auditories = (req, res) => {
-    Auditory.find({}, (err, auditory) => {
+exports.list_in_housing = (req, res) => {
+    Auditory.find({housing: req.params.housing}, (err, auditory) => {
         if (err)
             res.send(err);
         res.json(auditory);

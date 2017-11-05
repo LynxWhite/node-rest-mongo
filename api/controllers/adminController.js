@@ -3,13 +3,13 @@
 const mongoose = require('mongoose');
 const Admin = mongoose.model('Admin');
 const Faculty = mongoose.model('Faculty');
-const bcrypt = require('bcrypt')
-const jwt = require('jwt-simple')
-const config = require('../../config')
+const bcrypt = require('bcrypt');
+const jwt = require('jwt-simple');
+const config = require('../../config');
 
 exports.create_an_admin = (req, res) => {
     const {login, pass, faculty} = req.body;
-    Faculty.findOne({abbr_key: faculty}, (err, fac) => {
+    Faculty.findOne({abbr: faculty}, (err, fac) => {
         if (err)
             res.send(err);
         const new_admin = new Admin({
