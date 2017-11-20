@@ -52,16 +52,16 @@ exports.admin_account = (req, res) => {
 
 exports.admin_login = (req, res) => {
     if (!req.body.login || !req.body.pass) {
-        return res.sendStatus(400) 
+        return res.sendStatus(400);
     } else {
         const login = req.body.login;
         const password = req.body.pass;
         Admin.findOne({login: login})
-            .select('pass') 
+            .select('pass')
             .exec((err, user) => {
                 if (err) {
                     return res.sendStatus(500)
-                } 
+                }
                 if (!user) {return res.sendStatus(401)}
                 bcrypt.compare(password, user.pass, (err, valid) => {
                     if (err) {

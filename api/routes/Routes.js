@@ -9,23 +9,25 @@ module.exports = (app) => {
     const auditories = require('../controllers/auditoryController');
     const times = require('../controllers/timeController');
     const timetable = require('../controllers/timetableController');
-
+//libraries
+    app.route('/libraries/:faculty')
+        .get(timetable.get_all_libraries);
 //timetable
     app.route('/timetable/')
         .post(timetable.create_table);
     app.route('/timetable/:year/:semester/:faculty/:direction/:course/')
         .get(timetable.get_timetable);
 
-//faculty 
+//faculty
     app.route('/faculties')
         .get(faculties.list_all_faculties)
         .post(faculties.create_a_faculty);
-    
+
         app.route('/faculties/:facultyId')
             .get(faculties.read_a_faculty)
             .put(faculties.update_a_faculty)
             .delete(faculties.delete_a_faculty);
-//direction 
+//direction
     app.route('/directions/:facultyId')
         .get(directions.list_in_faculty)
     app.route('/directions')
@@ -35,17 +37,17 @@ module.exports = (app) => {
             .get(directions.read_a_direction)
             .put(directions.update_a_direction)
             .delete(directions.delete_a_direction);
-            
-//teacher           
+
+//teacher
     app.route('/teachers')
         .get(teachers.list_in_faculty)
         .post(teachers.create_a_teacher);
-        
+
         app.route('/teachers/:teacherId')
             .get(teachers.read_a_teacher)
             .put(teachers.update_a_teacher)
             .delete(teachers.delete_a_teacher);
-//subject           
+//subject
     app.route('/subjects')
         .get(subjects.list_in_faculty)
         .post(subjects.create_a_subject);
@@ -54,7 +56,7 @@ module.exports = (app) => {
             .get(subjects.read_a_subject)
             .put(subjects.update_a_subject)
             .delete(subjects.delete_a_subject);
-//auditory           
+//auditory
     app.route('/auditories')
         .get(auditories.list_in_housing)
         .post(auditories.create_a_auditory);
@@ -64,7 +66,7 @@ module.exports = (app) => {
             .put(auditories.update_a_auditory)
             .delete(auditories.delete_a_auditory);
 
-//time           
+//time
     app.route('/times')
         .post(times.create_a_time);
 

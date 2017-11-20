@@ -98,7 +98,7 @@ const DirectionSchema = new Schema({
         type: String,
     },
     faculty: {
-        type : Schema.Types.ObjectId, 
+        type : Schema.Types.ObjectId,
         ref: 'Faculty'
     }
 });
@@ -128,7 +128,7 @@ const SubjectSchema = new Schema({
         type: String,
     },
     faculty: {
-        type : Schema.Types.ObjectId, 
+        type : Schema.Types.ObjectId,
         ref: 'Faculty'
     }
 });

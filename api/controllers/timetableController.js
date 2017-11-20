@@ -4,6 +4,9 @@ const mongoose = require('mongoose');
 
 const Faculty = mongoose.model('Faculty');
 const Direction = mongoose.model('Direction');
+const Teacher = mongoose.model('Teacher');
+const Subject = mongoose.model('Subject');
+const Auditory = mongoose.model('Auditory');
 const Time = mongoose.model('Time');
 const Table = mongoose.model('Table');
 
@@ -26,6 +29,26 @@ exports.create_table = (req, res) => {
         res.json(table);
     });
 };
+
+exports.get_all_libraries = (req, res) => {
+    const {faculty} = req.params;
+    let libraries = [];
+    Direction.find({faculty}, (err, direction) => {
+        libraries.push(direction);
+    });
+    Teacher.find({faculty}, (err, teacher) => {
+        libraries.push(teacher);
+    });
+    Subject.find({faculty}, (err, subject) => {
+        libraries.push(subject);
+    });
+    Auditory.find({}, (err, auditory) => {
+        libraries.push(auditory);
+    }).then(() => {
+        res.send(libraries);
+    })
+};
+
 
 exports.get_timetable = (req, res) => {
     const {year, semester, faculty, direction, course} = req.params;
