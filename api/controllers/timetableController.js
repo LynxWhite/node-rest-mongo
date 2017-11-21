@@ -35,17 +35,20 @@ exports.get_all_libraries = (req, res) => {
     let libraries = [];
     Direction.find({faculty}, (err, direction) => {
         libraries.push(direction);
-    });
-    Teacher.find({faculty}, (err, teacher) => {
-        libraries.push(teacher);
-    });
-    Subject.find({faculty}, (err, subject) => {
-        libraries.push(subject);
-    });
-    Auditory.find({}, (err, auditory) => {
-        libraries.push(auditory);
     }).then(() => {
-        res.send(libraries);
+        Teacher.find({faculty}, (err, teacher) => {
+            libraries.push(teacher);
+        }).then(() => {
+            Subject.find({faculty}, (err, subject) => {
+                libraries.push(subject);
+            }).then(() => {
+                Auditory.find({}, (err, auditory) => {
+                    libraries.push(auditory);
+                }).then(() => {
+                    res.send(libraries);
+                })
+            })
+        })
     })
 };
 
