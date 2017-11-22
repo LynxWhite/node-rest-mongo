@@ -32,23 +32,21 @@ exports.create_table = (req, res) => {
 
 exports.get_all_libraries = (req, res) => {
     const {faculty} = req.params;
-    let libraries = [];
-    Direction.find({faculty}, (err, direction) => {
-        libraries.push(direction);
-    }).then(() => {
-        Teacher.find({faculty}, (err, teacher) => {
-            libraries.push(teacher);
-        }).then(() => {
-            Subject.find({faculty}, (err, subject) => {
-                libraries.push(subject);
-            }).then(() => {
-                Auditory.find({}, (err, auditory) => {
-                    libraries.push(auditory);
-                }).then(() => {
-                    res.send(libraries);
-                })
-            })
-        })
+    let promises = [];
+    promises.push(Direction.find({faculty}).then((value) => {
+        return {type:'Направления', icon: 'directions', value};
+    }));
+    promises.push(Teacher.find({faculty}).then((value) => {
+        return {type:'Преподаватели', icon: 'group', value};
+    }));
+    promises.push(Subject.find({faculty}).then((value) => {
+        return {type:'Предметы', icon: 'assignment', value};
+    }));
+    promises.push(Auditory.find({}).then((value) => {
+        return {type:'Аудитории', icon: 'local_library', value};
+    }));
+    Promise.all(promises).then(libraries => {
+        res.send(libraries);
     })
 };
 
