@@ -9,25 +9,21 @@ const config = require('../../config');
 
 exports.create_an_admin = (req, res) => {
     const {login, pass, faculty} = req.body;
-    Faculty.findOne({faculty}, (err, fac) => {
-        if (err)
-            res.send(err);
-        const new_admin = new Admin({
-            login,
-            faculty: fac,
-        });
-        bcrypt.hash(pass, 10, (err, hash) => {
-            if (err){res.sendStatus(500)}
-            else {
-                new_admin.pass = hash
-                new_admin.save(err => {
-                    if (err) { res.sendStatus(500)}
-                    else {
-                        res.sendStatus(201)
-                    }
-                })
-            }
-        })
+    const new_admin = new Admin({
+        login,
+        faculty,
+    });
+    bcrypt.hash(pass, 10, (err, hash) => {
+        if (err){res.sendStatus(500)}
+        else {
+            new_admin.pass = hash
+            new_admin.save(err => {
+                if (err) { res.sendStatus(500)}
+                else {
+                    res.sendStatus(201)
+                }
+            })
+        }
     });
 }
 
