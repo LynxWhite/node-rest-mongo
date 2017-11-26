@@ -7,7 +7,7 @@ exports.list_all_faculties = (req, res) => {
     Faculty.find({}, (err, faculty) => {
         if (err)
             res.send(err);
-        res.json({type: 'faculties', value: faculty})
+        res.json(faculty);
     })
 };
 
@@ -16,7 +16,7 @@ exports.create_a_faculty = (req, res) => {
     new_faculty.save((err, faculty) => {
         if (err)
             res.send(err);
-        res.json(faculty);
+        res.json({type: 'faculties', value: faculty})
     })
 }
 

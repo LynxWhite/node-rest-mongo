@@ -7,7 +7,7 @@ exports.list_in_faculty = (req, res) => {
     Subject.find({faculty: req.params.facultyId}, (err, subject) => {
         if (err)
             res.send(err);
-        res.json({type: 'subjects', value: subject})
+        res.json(subject);
     })
 };
 
@@ -16,7 +16,7 @@ exports.create_a_subject = (req, res) => {
     new_subject.save((err, subject) => {
         if (err)
             res.send(err);
-        res.json(subject);
+        res.json({type: 'subjects', value: subject})
     })
 }
 
