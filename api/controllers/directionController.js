@@ -3,15 +3,6 @@
 const mongoose = require('mongoose');
 const Direction = mongoose.model('Direction');
 
-
-exports.list_in_faculty = (req, res) => {
-    Direction.find({faculty: req.params.facultyId}, (err, direction) => {
-        if (err)
-            res.send(err);
-        res.json(direction);
-    })
-};
-
 exports.create_a_direction = (req, res) => {
     const new_direction = new Direction(req.body);
     new_direction.save((err, direction) => {

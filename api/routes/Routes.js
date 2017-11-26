@@ -30,12 +30,10 @@ module.exports = (app) => {
             .put(faculties.update_a_faculty)
             .delete(faculties.delete_a_faculty);
 //direction
-    app.route('/directions/:facultyId')
-        .get(directions.list_in_faculty)
     app.route('/directions')
         .post(directions.create_a_direction)
 
-        app.route('/direction/:directionId')
+        app.route('/directions/:directionId')
             .get(directions.read_a_direction)
             .put(directions.update_a_direction)
             .delete(directions.delete_a_direction);
