@@ -9,7 +9,7 @@ const config = require('../../config');
 
 exports.create_an_admin = (req, res) => {
     const {login, pass, faculty} = req.body;
-    Faculty.findOne({abbr: faculty}, (err, fac) => {
+    Faculty.findOne({faculty}, (err, fac) => {
         if (err)
             res.send(err);
         const new_admin = new Admin({
