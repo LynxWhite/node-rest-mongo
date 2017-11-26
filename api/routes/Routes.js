@@ -75,7 +75,7 @@ module.exports = (app) => {
         app.route('/times/:timeId')
             .get(times.read_a_time)
 //admin
-    app.route('/admin')
+    app.route('/admins')
         .post(admins.create_an_admin);
     app.route('/login')
         .post(admins.admin_login);
