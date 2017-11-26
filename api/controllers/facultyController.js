@@ -7,7 +7,7 @@ exports.list_all_faculties = (req, res) => {
     Faculty.find({}, (err, faculty) => {
         if (err)
             res.send(err);
-        res.json(faculty);
+        res.json({type: 'faculties', value: faculty})
     })
 };
 

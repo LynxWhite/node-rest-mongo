@@ -8,7 +8,7 @@ exports.create_a_direction = (req, res) => {
     new_direction.save((err, direction) => {
         if (err)
             res.send(err);
-        res.json(direction);
+        res.json({type: 'directions', value: direction})
     })
 }
 

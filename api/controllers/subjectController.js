@@ -7,7 +7,7 @@ exports.list_in_faculty = (req, res) => {
     Subject.find({faculty: req.params.facultyId}, (err, subject) => {
         if (err)
             res.send(err);
-        res.json(subject);
+        res.json({type: 'subjects', value: subject})
     })
 };
 

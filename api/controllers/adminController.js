@@ -17,10 +17,10 @@ exports.create_an_admin = (req, res) => {
         if (err){res.sendStatus(500)}
         else {
             new_admin.pass = hash
-            new_admin.save(err => {
+            new_admin.save((err, user) => {
                 if (err) { res.sendStatus(500)}
                 else {
-                    res.sendStatus(201)
+                    res.json({type: 'admins', value: user})
                 }
             })
         }
@@ -58,9 +58,9 @@ exports.admin_account = (req, res) => {
         if (err) {
             return res.sendStatus(500)
         }
-        if (!user) { 
+        if (!user) {
             return res.sendStatus(401)
-        } 
+        }
         res.json(user)
     })
 }

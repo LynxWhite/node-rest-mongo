@@ -7,7 +7,7 @@ exports.list_in_housing = (req, res) => {
     Auditory.find({housing: req.params.housing}, (err, auditory) => {
         if (err)
             res.send(err);
-        res.json(auditory);
+        res.json({type: 'auditories', value: auditory})
     })
 };
 

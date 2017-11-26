@@ -7,7 +7,7 @@ exports.list_in_faculty = (req, res) => {
     Teacher.find({faculty: req.params.facultyId}, (err, teacher) => {
         if (err)
             res.send(err);
-        res.json(teacher);
+        res.json({type: 'teachers', value: teacher})
     })
 };
 
