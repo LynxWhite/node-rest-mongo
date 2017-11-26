@@ -11,7 +11,9 @@ module.exports = (app) => {
     const timetable = require('../controllers/timetableController');
 //libraries
     app.route('/libraries/:faculty')
-        .get(timetable.get_all_libraries);
+        .get(timetable.get_manager_libraries);
+    app.route('/libraries/')
+        .get(timetable.get_admin_libraries);
 //timetable
     app.route('/timetable/')
         .post(timetable.create_table);
@@ -81,4 +83,7 @@ module.exports = (app) => {
         .post(admins.admin_login);
     app.route('/account')
         .get(admins.admin_account);
+        app.route('/admins/:adminId')
+            .put(admins.update_an_admin)
+            .delete(admins.delete_an_admin);
 }

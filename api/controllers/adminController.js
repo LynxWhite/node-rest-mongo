@@ -31,6 +31,25 @@ exports.create_an_admin = (req, res) => {
     });
 }
 
+exports.delete_an_admin = (req, res) => {
+    Admin.remove({
+        _id: req.params.adminId
+    }, (err, admin) => {
+        if (err)
+            res.send(err);
+        res.json({message: 'Администратор удалён'});
+    })
+};
+
+exports.update_an_admin = (req, res) => {
+    Admin.findOneAndUpdate({_id: req.params.adminId}, req.body, {new: true}, (err, admin) => {
+        if (err)
+            res.send(err);
+        res.json('Администратор изменен');
+    })
+}
+
+
 exports.admin_account = (req, res) => {
     if (!req.headers['x-auth']) { return res.sendStatus(401)}
     try {
@@ -40,7 +59,7 @@ exports.admin_account = (req, res) => {
     }
     const login = jwt.decode(req.headers['x-auth'], config.secretkey).login
     Admin.findOne({login: login}, (err, user) => {
-        if (err) { 
+        if (err) {
             return res.sendStatus(500)
         }
         if (!user) { 

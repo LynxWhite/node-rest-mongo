@@ -28,6 +28,16 @@ const TableSchema = new Schema({
             type: String,
         },
     ],
+    start: [
+        {
+            type: Date,
+        },
+    ],
+    end: [
+        {
+            type: Date,
+        },
+    ],
     cells: [
         {
             time: {
@@ -78,6 +88,10 @@ const FacultySchema = new Schema({
     abbr: {
         type: String
     },
+    used: {
+        type: Number,
+        default: 0,
+    },
 });
 
 
@@ -100,6 +114,10 @@ const DirectionSchema = new Schema({
     faculty: {
         type : Schema.Types.ObjectId,
         ref: 'Faculty'
+    },
+    used: {
+        type: Number,
+        default: 0,
     }
 });
 
@@ -115,8 +133,12 @@ const TeacherSchema = new Schema({
         type: String,
     },
     faculty: {
-        type : Schema.Types.ObjectId, 
+        type : Schema.Types.ObjectId,
         ref: 'Faculty'
+    },
+    used: {
+        type: Number,
+        default: 0,
     }
 });
 
@@ -130,6 +152,10 @@ const SubjectSchema = new Schema({
     faculty: {
         type : Schema.Types.ObjectId,
         ref: 'Faculty'
+    },
+    used: {
+        type: Number,
+        default: 0,
     }
 });
 
@@ -156,6 +182,10 @@ const AuditorySchema = new Schema({
         type: Boolean,
         default: false,
     },
+    used: {
+        type: Number,
+        default: 0,
+    }
 });
 
 const TimeSchema = new Schema({

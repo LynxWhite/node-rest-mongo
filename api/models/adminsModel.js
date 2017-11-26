@@ -17,6 +17,10 @@ const AdminSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Faculty',
     },
+    used: {
+        type: Number,
+        default: 0,
+    }
 });
 
 module.exports = mongoose.model('Admin', AdminSchema);

@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-    if (req.method === 'POST' && req.originalUrl !== '/login') {
+    if ((req.method === 'POST' || req.method === 'DELETE' || req.method === 'PUT') && req.originalUrl !== '/login') {
         if (!req.headers['x-auth']) { return res.sendStatus(401)}
         try {
             const login = jwt.decode(req.headers['x-auth'], config.secretkey).login;
