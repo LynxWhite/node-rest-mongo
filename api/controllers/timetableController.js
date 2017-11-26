@@ -50,7 +50,7 @@ exports.get_manager_libraries = (req, res) => {
 
 exports.get_admin_libraries = (req, res) => {
     let promises = [];
-    promises.push(Admin.find({faculty: { $ne: null }}).populate('faculty').then((value) => {
+    promises.push(Admin.find({faculty: { $ne: null }}).then((value) => {
         return {type: 'admins', name:'Менеджеры', icon: 'vpn_key', value};
     }));
     promises.push(Faculty.find({}).then((value) => {
