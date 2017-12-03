@@ -10,9 +10,9 @@ module.exports = (app) => {
     const times = require('../controllers/timeController');
     const timetable = require('../controllers/timetableController');
 //libraries
-    app.route('/libraries/:faculty')
+    app.route('/libraries/manager/:faculty')
         .get(timetable.get_manager_libraries);
-    app.route('/libraries/')
+    app.route('/libraries/admin/:faculty?')
         .get(timetable.get_admin_libraries);
 //timetable
     app.route('/timetable/')

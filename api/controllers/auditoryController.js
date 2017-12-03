@@ -40,7 +40,7 @@ exports.delete_a_auditory = (req, res) => {
     Auditory.remove({
         _id: req.params.auditoryId
     }, (err, auditory) => {
-        if (err) 
+        if (err)
             res.send(err);
         res.json({message: 'Аудитория удалёна'});
     })

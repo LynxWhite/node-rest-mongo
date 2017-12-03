@@ -54,15 +54,16 @@ exports.admin_account = (req, res) => {
         return res.sendStatus(400);
     }
     const login = jwt.decode(req.headers['x-auth'], config.secretkey).login
-    Admin.findOne({login: login}, (err, user) => {
-        if (err) {
-            return res.sendStatus(500)
-        }
-        if (!user) {
-            return res.sendStatus(401)
-        }
-        res.json(user)
-    })
+    Admin.findOne({login: login}).populate('faculty')
+        .exec((err, user) => {
+            if (err) {
+                return res.sendStatus(500)
+            }
+            if (!user) {
+                return res.sendStatus(401)
+            }
+            res.json(user)
+        })
 }
 
 exports.admin_login = (req, res) => {
