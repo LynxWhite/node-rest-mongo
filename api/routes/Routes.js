@@ -16,7 +16,7 @@ module.exports = (app) => {
     app.route('/libraries/admin/:faculty?')
         .get(libraries.get_admin_libraries);
 //timetable
-    app.route('/timetables/')
+    app.route('/timetables/:faculty?')
         .get(timetable.get_timetables);
     app.route('/timetable/')
         .post(timetable.create_table);

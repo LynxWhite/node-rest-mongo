@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const Time = mongoose.model('Time');
 const Table = mongoose.model('Table');
+const ObjectId = require('mongodb').ObjectID;
 
 const array = {};
 
@@ -40,11 +41,13 @@ exports.get_timetable = (req, res) => {
 };
 
 exports.get_timetables = (req, res) => {
+    const {faculty} = req.params;
     Table.aggregate([
+        { $match: faculty? {faculty: ObjectId(faculty)} : {}},
         { $group : {
-                _id : { faculty: "$faculty", year: "$year", semester: "$semester" },
-                tables: { $push: "$$ROOT" }
-            } }
+            _id : { faculty: "$faculty", year: "$year", semester: "$semester" },
+            tables: { $push: "$$ROOT" }
+        } }
     ], (err, table) => {
         if (err)
             res.send(err);
