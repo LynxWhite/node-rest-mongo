@@ -16,6 +16,8 @@ exports.create_table = (req, res) => {
         faculty: req.body.faculty,
         direction: req.body.direction,
         subgroups: req.body.subgroup,
+        start: req.body.start,
+        end: req.body.end,
         cells: [],
     });
     new_table.save((err, table) => {
@@ -35,4 +37,17 @@ exports.get_timetable = (req, res) => {
     for (let i = 0; i<=5; i++) {
         list[i] = [times[i].time];
     }
+};
+
+exports.get_timetables = (req, res) => {
+    Table.aggregate([
+        { $group : {
+                _id : { faculty: "$faculty", year: "$year", semester: "$semester" },
+                tables: { $push: "$$ROOT" }
+            } }
+    ], (err, table) => {
+        if (err)
+            res.send(err);
+        res.json(table);
+    } )
 };

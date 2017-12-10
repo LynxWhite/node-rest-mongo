@@ -16,11 +16,12 @@ module.exports = (app) => {
     app.route('/libraries/admin/:faculty?')
         .get(libraries.get_admin_libraries);
 //timetable
+    app.route('/timetables/')
+        .get(timetable.get_timetables);
     app.route('/timetable/')
         .post(timetable.create_table);
     app.route('/timetable/:year/:semester/:faculty/:direction/:course/')
         .get(timetable.get_timetable);
-
 //faculty
     app.route('/faculties')
         .get(faculties.list_all_faculties)
