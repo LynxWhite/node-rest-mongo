@@ -9,11 +9,12 @@ module.exports = (app) => {
     const auditories = require('../controllers/auditoryController');
     const times = require('../controllers/timeController');
     const timetable = require('../controllers/timetableController');
+    const libraries = require('../controllers/libraryController');
 //libraries
     app.route('/libraries/manager/:faculty')
-        .get(timetable.get_manager_libraries);
+        .get(libraries.get_manager_libraries);
     app.route('/libraries/admin/:faculty?')
-        .get(timetable.get_admin_libraries);
+        .get(libraries.get_admin_libraries);
 //timetable
     app.route('/timetable/')
         .post(timetable.create_table);
