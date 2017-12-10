@@ -37,7 +37,7 @@ exports.get_manager_libraries = (req, res) => {
     promises.push(Direction.find({faculty}).sort({code: -1}).then((value) => {
         return {type: 'directions', name:'Направления', icon: 'directions', value};
     }));
-    promises.push(Teacher.find({faculty}).then((value) => {
+    promises.push(Teacher.find({faculty}).sort({fio:1}).then((value) => {
         return {type: 'teachers', name:'Преподаватели', icon: 'group', value};
     }));
     promises.push(Subject.find({faculty}).then((value) => {
@@ -60,7 +60,7 @@ exports.get_admin_libraries = (req, res) => {
     promises.push(Direction.find(faculty ? {faculty: faculty} : '').sort({code: -1}).then((value) => {
         return {type: 'directions', name:'Направления', icon: 'directions', value};
     }));
-    promises.push(Teacher.find(faculty ? {faculty: faculty} : '').then((value) => {
+    promises.push(Teacher.find(faculty ? {faculty: faculty} : '').sort({fio:1}).then((value) => {
         return {type: 'teachers', name:'Преподаватели', icon: 'group', value};
     }));
     promises.push(Subject.find({}).then((value) => {

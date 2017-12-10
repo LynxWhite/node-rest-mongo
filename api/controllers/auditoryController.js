@@ -16,7 +16,7 @@ exports.create_a_auditory = (req, res) => {
     new_auditory.save((err, auditory) => {
         if (err)
             res.send(err);
-        res.json({type: 'auditories', value: user})
+        res.json({type: 'auditories', value: auditory})
     })
 }
 
