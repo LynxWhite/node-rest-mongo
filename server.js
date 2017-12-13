@@ -28,7 +28,7 @@ app.use((req, res, next) => {
             return res.sendStatus(400);
         }
     }
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type, x-auth');
     res.setHeader('Access-Control-Allow-Credentials', true);
