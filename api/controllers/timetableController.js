@@ -52,6 +52,17 @@ exports.get_timetables = (req, res) => {
     ], (err, result) => {
         if (err)
             res.send(err);
-        res.json(result);
-    } )
+        Table.populate(result, [{
+            path: 'tables.faculty',
+            model: 'Faculty',
+        }, {
+            path: '_id.faculty',
+            model: 'Faculty',
+        }, {
+            path: 'tables.direction',
+            model: 'Direction',
+        }], (err, p) => {
+            res.json(p);
+        });
+    } );
 };

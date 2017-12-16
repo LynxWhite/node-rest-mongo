@@ -45,7 +45,7 @@ exports.get_admin_libraries = (req, res) => {
     promises.push(Teacher.find(faculty ? {faculty: faculty} : '').sort({fio:1}).then((value) => {
         return {type: 'teachers', name:'Преподаватели', icon: 'group', value};
     }));
-    promises.push(Subject.find({}).then((value) => {
+    promises.push(Subject.find(faculty ? {faculty: faculty} : '').then((value) => {
         return {type: 'subjects', name:'Предметы', icon: 'assignment', value};
     }));
     promises.push(Auditory.find({}).then((value) => {
