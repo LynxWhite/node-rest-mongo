@@ -30,9 +30,11 @@ const TableSchema = new Schema({
     ],
     start: {
         type: Date,
+        default: Date.now
     },
     end: {
         type: Date,
+        default: Date.now
     },
     cells: [
         {

@@ -18,6 +18,8 @@ exports.create_table = (req, res) => {
         faculty: req.body.faculty,
     }, (err, table) => {
         if (table.length === 0) {
+            const start = req.body.start.split('.');
+            const end = req.body.end.split('.');
             const new_table = new Table({
                 year: req.body.year,
                 semester: req.body.semester,
@@ -26,8 +28,8 @@ exports.create_table = (req, res) => {
                 faculty: req.body.faculty,
                 direction: req.body.direction,
                 subgroups: req.body.subgroup,
-                start: req.body.start,
-                end: req.body.end,
+                start: new Date(start[2],start[0]-1,start[1]),
+                end: new Date(end[2],end[0]-1,end[1]),
                 cells: [],
             });
             new_table.save((err, table) => {
