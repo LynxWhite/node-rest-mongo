@@ -15,6 +15,7 @@ exports.create_table = (req, res) => {
         semester: req.body.semester,
         course: req.body.course,
         direction: req.body.direction,
+        faculty: req.body.faculty,
     }, (err, table) => {
         if (table.length === 0) {
             const new_table = new Table({
