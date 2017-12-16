@@ -10,23 +10,32 @@ const ObjectId = require('mongodb').ObjectID;
 const array = {};
 
 exports.create_table = (req, res) => {
-    const new_table = new Table({
+    Table.find({
         year: req.body.year,
         semester: req.body.semester,
         course: req.body.course,
-        groupName: req.body.groupName,
-        faculty: req.body.faculty,
         direction: req.body.direction,
-        subgroups: req.body.subgroup,
-        start: req.body.start,
-        end: req.body.end,
-        cells: [],
-    });
-    new_table.save((err, table) => {
-        if (err)
-            res.send(err);
-        res.json(table);
-    });
+    }, (err, table) => {
+        if (table.length === 0) {
+            const new_table = new Table({
+                year: req.body.year,
+                semester: req.body.semester,
+                course: req.body.course,
+                groupName: req.body.groupName,
+                faculty: req.body.faculty,
+                direction: req.body.direction,
+                subgroups: req.body.subgroup,
+                start: req.body.start,
+                end: req.body.end,
+                cells: [],
+            });
+            new_table.save((err, table) => {
+                if (err)
+                    res.send(err);
+                res.json(table);
+            });
+        }
+    })
 };
 
 exports.get_timetable = (req, res) => {
