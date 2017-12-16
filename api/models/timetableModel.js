@@ -28,16 +28,12 @@ const TableSchema = new Schema({
             type: String,
         },
     ],
-    start: [
-        {
-            type: Date,
-        },
-    ],
-    end: [
-        {
-            type: Date,
-        },
-    ],
+    start: {
+        type: Date,
+    },
+    end: {
+        type: Date,
+    },
     cells: [
         {
             time: {
