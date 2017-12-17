@@ -18,8 +18,8 @@ exports.create_table = (req, res) => {
         faculty: req.body.faculty,
     }, (err, table) => {
         if (table.length === 0) {
-            const start = req.body.start.split('.');
-            const end = req.body.end.split('.');
+            const start = req.body.start ? req.body.start.split('.') : '';
+            const end = req.body.end ? req.body.end.split('.') : '';
             const new_table = new Table({
                 year: req.body.year,
                 semester: req.body.semester,
@@ -28,8 +28,8 @@ exports.create_table = (req, res) => {
                 faculty: req.body.faculty,
                 direction: req.body.direction,
                 subgroups: req.body.subgroup,
-                start: new Date(start[2],start[0]-1,start[1]),
-                end: new Date(end[2],end[0]-1,end[1]),
+                start: start[0] ? new Date(start[2],start[1]-s,start[0]+1) : new Date(),
+                end: end[0] ? new Date(end[2],end[1]-1,end[0]+1) : new Date(),
                 cells: [],
             });
             new_table.save((err, table) => {
@@ -37,7 +37,7 @@ exports.create_table = (req, res) => {
                     res.send(err);
                 res.json(table);
             });
-        }
+        } else res.json({message: 'Расписание уже существует'});
     })
 };
 
@@ -77,4 +77,14 @@ exports.get_timetables = (req, res) => {
             res.json(p);
         });
     } );
+};
+
+exports.delete_timetable = (req, res) => {
+    Table.remove({
+        _id: req.params.tableId
+    }, (err, timetable) => {
+        if (err)
+            res.send(err);
+        res.json({message: 'Расписание удалёно'});
+    })
 };
