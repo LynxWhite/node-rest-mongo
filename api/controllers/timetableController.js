@@ -57,7 +57,7 @@ exports.get_timetables = (req, res) => {
     const {faculty} = req.params;
     Table.aggregate([
         { $match: faculty? {faculty: ObjectId(faculty)} : {}},
-        { $sort : { year: 1, faculty: 1 } },
+        { $sort : { year: 1, faculty: 1, direction: 1, profile: 1, course: 1, level: 1 } },
         { $group : {
             _id : { faculty: "$faculty", year: "$year", semester: "$semester"},
             tables: { $push: "$$ROOT" }
