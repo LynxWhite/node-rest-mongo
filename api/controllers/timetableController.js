@@ -28,7 +28,7 @@ exports.create_table = (req, res) => {
                 faculty: req.body.faculty,
                 direction: req.body.direction,
                 subgroups: req.body.subgroup,
-                start: start[0] ? new Date(start[2],start[1]-s,start[0]+1) : new Date(),
+                start: start[0] ? new Date(start[2],start[1]-start[0]+1) : new Date(),
                 end: end[0] ? new Date(end[2],end[1]-1,end[0]+1) : new Date(),
                 cells: [],
             });
@@ -91,7 +91,14 @@ exports.delete_timetable = (req, res) => {
 };
 
 exports.update_timetable = (req, res) => {
-    Table.findOneAndUpdate({_id: req.params.tableId}, req.body, {new: true}, (err, table) => {
+    const start = req.body.start ? req.body.start.split('.') : '';
+    const end = req.body.end ? req.body.end.split('.') : '';
+    const newFields = {
+        subgroups: req.body.subgroups,
+        start: start[0] ? new Date(start[2],start[1]-start[0]+1) : new Date(),
+        end: end[0] ? new Date(end[2],end[1]-1,end[0]+1) : new Date(),
+    }
+    Table.findOneAndUpdate({_id: req.params.tableId}, newFields, (err, table) => {
         if (err)
             res.send(err);
         res.json(table);
