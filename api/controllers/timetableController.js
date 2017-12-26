@@ -89,3 +89,11 @@ exports.delete_timetable = (req, res) => {
         res.json({message: 'Расписание удалёно'});
     })
 };
+
+exports.update_timetable = (req, res) => {
+    Table.findOneAndUpdate({_id: req.params.tableId}, req.body, {new: true}, (err, table) => {
+        if (err)
+            res.send(err);
+        res.json(table);
+    })
+}

@@ -19,7 +19,8 @@ module.exports = (app) => {
     app.route('/timetables/:faculty?')
         .get(timetable.get_timetables);
     app.route('/timetable/:tableId')
-        .delete(timetable.delete_timetable);
+        .delete(timetable.delete_timetable)
+        .put(timetable.update_timetable);
     app.route('/timetable/')
         .post(timetable.create_table);
     app.route('/timetable/:year/:semester/:faculty/:direction/:course/')

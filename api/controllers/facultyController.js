@@ -40,7 +40,7 @@ exports.delete_a_faculty = (req, res) => {
     Faculty.remove({
         _id: req.params.facultyId
     }, (err, faculty) => {
-        if (err) 
+        if (err)
             res.send(err);
         res.json({message: 'Факультет удалён'});
     })

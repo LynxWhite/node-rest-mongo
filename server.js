@@ -30,7 +30,7 @@ app.use((req, res, next) => {
     }
     res.header('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type, x-auth');
+    res.setHeader('Access-Control-Allow-Headers', '*, X-Requested-With, content-type, x-auth');
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
