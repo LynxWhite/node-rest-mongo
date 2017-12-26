@@ -27,7 +27,7 @@ exports.create_table = (req, res) => {
                 groupName: req.body.groupName,
                 faculty: req.body.faculty,
                 direction: req.body.direction,
-                subgroups: req.body.subgroup,
+                subgroups: req.body.subgroups,
                 start: start[0] ? new Date(start[2],start[1]-start[0]+1) : new Date(),
                 end: end[0] ? new Date(end[2],end[1]-1,end[0]+1) : new Date(),
                 cells: [],
