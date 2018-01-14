@@ -23,7 +23,7 @@ module.exports = (app) => {
         .put(timetable.update_timetable);
     app.route('/timetable/')
         .post(timetable.create_table);
-    app.route('/timetable/:year/:semester/:faculty/:direction/:course/')
+    app.route('/timetable/:year/:semester/:faculty/:level')
         .get(timetable.get_timetable);
 //faculty
     app.route('/faculties')

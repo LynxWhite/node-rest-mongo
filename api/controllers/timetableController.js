@@ -10,26 +10,25 @@ const ObjectId = require('mongodb').ObjectID;
 const array = {};
 
 exports.create_table = (req, res) => {
+    const {year, semester, course, direction, faculty, groupName, subgroups, start, end} = req.body;
     Table.find({
-        year: req.body.year,
-        semester: req.body.semester,
-        course: req.body.course,
-        direction: req.body.direction,
-        faculty: req.body.faculty,
+        year,
+        semester,
+        course,
+        direction,
+        faculty,
     }, (err, table) => {
         if (table.length === 0) {
-            const start = req.body.start ? req.body.start.split('.') : '';
-            const end = req.body.end ? req.body.end.split('.') : '';
             const new_table = new Table({
-                year: req.body.year,
-                semester: req.body.semester,
-                course: req.body.course,
-                groupName: req.body.groupName,
-                faculty: req.body.faculty,
-                direction: req.body.direction,
-                subgroups: req.body.subgroups,
-                start: start[0] ? new Date(start[2],start[1]-start[0]+1) : new Date(),
-                end: end[0] ? new Date(end[2],end[1]-1,end[0]+1) : new Date(),
+                year,
+                semester,
+                course,
+                groupName,
+                faculty,
+                direction,
+                subgroups,
+                start,
+                end,
                 cells: [],
             });
             new_table.save((err, table) => {
@@ -42,15 +41,56 @@ exports.create_table = (req, res) => {
 };
 
 exports.get_timetable = (req, res) => {
-    const {year, semester, faculty, direction, course} = req.params;
+    const {year, semester, faculty, level} = req.params;
     const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
     let times = [];
-    Time.find({faculty}, (err, time) => {
-        times = time;
+    Time.find({faculty}, (err, tts) => {
+        times = tts.map(time => {
+            return time.time;
+        })
     })
-    for (let i = 0; i<=5; i++) {
-        list[i] = [times[i].time];
-    }
+    let ddd = {};
+    Table.find({
+        year,
+        semester,
+        faculty,
+        }, (err, result) => {
+            Table.populate(result, [{
+                path: 'direction',
+                model: 'Direction',
+            }, {
+                path: 'cells.time',
+                model: 'Time',
+            }, {
+                path: 'cells.lessons.teacher',
+                model: 'Teacher',
+            }, {
+                path: 'cells.lessons.subject',
+                model: 'Subject',
+            }, {
+                path: 'cells.lessons.auditory',
+                model: 'Auditory',
+            }], (err, tables) => {
+                let trueTables = tables.filter(table => table.direction.level === level);
+                for (let day of days) {
+                    ddd[day] = times.map((time, index) => {
+                        const ttt = {};
+                        ttt[index] = [time, ...trueTables.map(table => {
+                            const tableCell = null;
+                            table.cells.forEach(cell => {
+                                if (cell.time === time && cell.day === day){
+                                    tableCell = cell;
+                                }
+                            })
+                            return tableCell;
+                        })]
+                        return ttt;
+                    })
+                }
+                res.json(ddd);
+            })
+        }
+    );
 };
 
 exports.get_timetables = (req, res) => {
@@ -91,12 +131,11 @@ exports.delete_timetable = (req, res) => {
 };
 
 exports.update_timetable = (req, res) => {
-    const start = req.body.start ? req.body.start.split('.') : '';
-    const end = req.body.end ? req.body.end.split('.') : '';
+    const {subgroups, start, end} = req.body;
     const newFields = {
-        subgroups: req.body.subgroups,
-        start: start[0] ? new Date(start[2],start[1]-start[0]+1) : new Date(),
-        end: end[0] ? new Date(end[2],end[1]-1,end[0]+1) : new Date(),
+        subgroups,
+        start,
+        end,
     }
     Table.findOneAndUpdate({_id: req.params.tableId}, newFields, (err, table) => {
         if (err)
