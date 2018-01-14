@@ -41,7 +41,7 @@ exports.create_table = (req, res) => {
 };
 
 exports.get_timetable = (req, res) => {
-    const {year, semester, faculty, level} = req.params;
+    const {year, semester, faculty, level, course} = req.params;
     const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
     let times = [];
     Time.find({faculty}, (err, tts) => {
@@ -71,7 +71,11 @@ exports.get_timetable = (req, res) => {
                 path: 'cells.lessons.auditory',
                 model: 'Auditory',
             }], (err, tables) => {
-                let trueTables = tables.filter(table => table.direction.level === level);
+                const educationLevel = level? level : tables[0].direction.level;
+                const educationCourse = course? course : tables[0].course;
+                let trueTables = tables.filter(table => (
+                    table.direction.level === educationLevel && table.course === educationCourse
+                ));
                 for (let day of days) {
                     ddd[day] = times.map((time, index) => {
                         const ttt = {};
