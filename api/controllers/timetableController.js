@@ -49,7 +49,6 @@ exports.get_timetable = (req, res) => {
             return time.time;
         })
     })
-    let ddd = {};
     Table.find({
         year,
         semester,
@@ -76,10 +75,11 @@ exports.get_timetable = (req, res) => {
                 let trueTables = tables.filter(table => (
                     table.direction.level === educationLevel && table.course === educationCourse
                 ));
+                let outputTimetable = {};
                 for (let day of days) {
-                    ddd[day] = times.map((time, index) => {
-                        const ttt = {};
-                        ttt[index] = [time, ...trueTables.map(table => {
+                    outputTimetable[day] = times.map((time, index) => {
+                        const line = {};
+                        line[index] = [time, ...trueTables.map(table => {
                             const tableCell = null;
                             table.cells.forEach(cell => {
                                 if (cell.time === time && cell.day === day){
@@ -88,10 +88,10 @@ exports.get_timetable = (req, res) => {
                             })
                             return tableCell;
                         })]
-                        return ttt;
+                        return line;
                     })
                 }
-                res.json(ddd);
+                res.json(outputTimetable);
             })
         }
     );
