@@ -94,8 +94,8 @@ exports.get_timetable = (req, res) => {
                 }
                 res.json({
                     timetable: outputTimetable,
-                    directions: tables.map(table => table.direction.name),
-                    courses: tables.map(table => table.course),
+                    directions: utils.unique(tables.map(table => table.direction.name)),
+                    courses: utils.unique(tables.map(table => table.course)),
                     levels: utils.unique(tables.map(table => table.direction.level)),
                 });
             })
