@@ -94,7 +94,9 @@ exports.get_timetable = (req, res) => {
                 }
                 res.json({
                     timetable: outputTimetable,
-                    directions: utils.unique(tables.map(table => table.direction.name)),
+                    directions: tables.filter(table => (table.course === educationCourse)).map(
+                        filtered => filtered.direction.name
+                    ),
                     courses: utils.unique(tables.map(table => table.course)),
                     levels: utils.unique(tables.map(table => table.direction.level)),
                 });
