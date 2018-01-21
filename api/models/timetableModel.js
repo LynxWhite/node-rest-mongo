@@ -28,6 +28,10 @@ const TableSchema = new Schema({
             type: String,
         },
     ],
+    time: {
+        type: Schema.Types.ObjectId,
+        ref: 'Time',
+    },
     start: {
         type: Date,
         default: Date.now
@@ -38,9 +42,8 @@ const TableSchema = new Schema({
     },
     cells: [
         {
-            time: {
-                type: Schema.Types.ObjectId,
-                ref: 'Time',
+            number: {
+                type: Number,
             },
             day: {
                 type: String,
@@ -187,13 +190,14 @@ const AuditorySchema = new Schema({
 });
 
 const TimeSchema = new Schema({
-    time: {
+    name: {
         type: String,
     },
-    faculty: {
-        type: Schema.Types.ObjectId,
-        ref: 'Faculty',
-    },
+    schedule: [
+        {
+            type: String,
+        }
+    ],
 })
 
 module.exports = mongoose.model('Table', TableSchema);

@@ -73,10 +73,9 @@ module.exports = (app) => {
 
 //time
     app.route('/times')
-        .post(times.create_a_time);
+        .post(times.create_a_time)
+        .get(times.list_all_times)
 
-        app.route('/times/:facultyId')
-            .get(times.list_all_times_by_faculty)
         app.route('/times/:timeId')
             .get(times.read_a_time)
 //admin

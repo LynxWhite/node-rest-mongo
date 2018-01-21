@@ -11,7 +11,7 @@ const ObjectId = require('mongodb').ObjectID;
 const array = {};
 
 exports.create_table = (req, res) => {
-    const {year, semester, course, direction, faculty, groupName, subgroups, start, end} = req.body;
+    const {year, semester, course, direction, faculty, groupName, subgroups, start, end, time} = req.body;
     Table.find({
         year,
         semester,
@@ -30,6 +30,7 @@ exports.create_table = (req, res) => {
                 subgroups,
                 start,
                 end,
+                time,
                 cells: [],
             });
             new_table.save((err, table) => {
@@ -44,14 +45,6 @@ exports.create_table = (req, res) => {
 exports.get_timetable = (req, res) => {
     const {year, semester, faculty, level, course} = req.params;
     const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
-    let times = [];
-    Time.find({faculty}, (err, tts) => {
-        if (tts) {
-            times = tts.map(time => {
-                return time.time;
-            });
-        }
-    })
     Table.find({
         year,
         semester,
@@ -78,28 +71,31 @@ exports.get_timetable = (req, res) => {
                 let trueTables = tables.filter(table => (
                     table.direction.level === educationLevel && table.course === educationCourse
                 ));
-                let outputTimetable = {};
-                for (let day of days) {
-                    outputTimetable[day] = times.map((time, index) => {
-                        return [time, ...trueTables.map(table => {
-                            const tableCell = null;
-                            table.cells.forEach(cell => {
-                                if (cell.time === time && cell.day === day){
-                                    tableCell = cell;
-                                }
-                            })
-                            return tableCell;
-                        })]
+                let times = [];
+                Time.findOne({_id: tables[0].time}, (err, times) => {
+                    let outputTimetable = {};
+                    for (let day of days) {
+                        outputTimetable[day] = times.schedule.map((time, index) => {
+                            return [time, ...trueTables.map(table => {
+                                const tableCell = null;
+                                table.cells.forEach(cell => {
+                                    if (cell.time === time && cell.day === day){
+                                        tableCell = cell;
+                                    }
+                                })
+                                return tableCell;
+                            })]
+                        });
+                    }
+                    res.json({
+                        timetable: outputTimetable,
+                        directions: tables.filter(table => (table.course === educationCourse)).map(
+                            filtered => filtered.direction.name
+                        ),
+                        courses: utils.unique(tables.map(table => table.course)),
+                        levels: utils.unique(tables.map(table => table.direction.level)),
                     });
-                }
-                res.json({
-                    timetable: outputTimetable,
-                    directions: tables.filter(table => (table.course === educationCourse)).map(
-                        filtered => filtered.direction.name
-                    ),
-                    courses: utils.unique(tables.map(table => table.course)),
-                    levels: utils.unique(tables.map(table => table.direction.level)),
-                });
+                })
             })
         }
     );
