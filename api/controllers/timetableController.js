@@ -1,5 +1,6 @@
 'use strict';
 
+const utils = require('../utils/utils.js');
 const mongoose = require('mongoose');
 
 const Time = mongoose.model('Time');
@@ -45,9 +46,11 @@ exports.get_timetable = (req, res) => {
     const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
     let times = [];
     Time.find({faculty}, (err, tts) => {
-        times = tts.map(time => {
-            return time.time;
-        })
+        if (tts) {
+            times = tts.map(time => {
+                return time.time;
+            });
+        }
     })
     Table.find({
         year,
@@ -78,8 +81,7 @@ exports.get_timetable = (req, res) => {
                 let outputTimetable = {};
                 for (let day of days) {
                     outputTimetable[day] = times.map((time, index) => {
-                        const line = {};
-                        line[index] = [time, ...trueTables.map(table => {
+                        return [time, ...trueTables.map(table => {
                             const tableCell = null;
                             table.cells.forEach(cell => {
                                 if (cell.time === time && cell.day === day){
@@ -88,10 +90,14 @@ exports.get_timetable = (req, res) => {
                             })
                             return tableCell;
                         })]
-                        return line;
-                    })
+                    });
                 }
-                res.json(outputTimetable);
+                res.json({
+                    timetable: outputTimetable,
+                    directions: tables.map(table => table.direction.name),
+                    courses: tables.map(table => table.course),
+                    levels: utils.unique(tables.map(table => table.direction.level)),
+                });
             })
         }
     );
