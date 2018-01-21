@@ -44,7 +44,7 @@ exports.create_table = (req, res) => {
 
 exports.get_timetable = (req, res) => {
     const {year, semester, faculty, level, course} = req.params;
-    const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+    const days = ['Понедельник...', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
     Table.find({
         year,
         semester,
