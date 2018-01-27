@@ -89,7 +89,7 @@ exports.get_timetable = (req, res) => {
                     res.json({
                         timetable: outputTimetable,
                         directions: tables.filter(table => (table.course === Number(educationCourse) && table.direction.level === educationLevel)).map(
-                            filtered => filtered.direction.name
+                            filtered => filtered.direction.abbr + ' (' + filtered.direction.profile + ')'
                         ),
                         courses: tables.filter(table => (table.direction.level === educationLevel)).map(
                             filtered => filtered.course

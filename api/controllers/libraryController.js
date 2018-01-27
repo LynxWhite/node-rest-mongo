@@ -16,6 +16,12 @@ const array = {};
 exports.get_manager_libraries = (req, res) => {
     const {faculty} = req.params;
     let promises = [];
+    promises.push(Admin.find({}).then((value) => {
+        return {type: 'admins', name:'Менеджеры', icon: 'vpn_key'};
+    }));
+    promises.push(Faculty.find({}).then((value) => {
+        return {type: 'faculties', name:'Факультеты', icon: 'work', value};
+    }));
     promises.push(Direction.find({faculty}).sort({code: -1}).then((value) => {
         return {type: 'directions', name:'Направления', icon: 'directions', value};
     }));
@@ -24,6 +30,9 @@ exports.get_manager_libraries = (req, res) => {
     }));
     promises.push(Subject.find({faculty}).then((value) => {
         return {type: 'subjects', name:'Предметы', icon: 'assignment', value};
+    }));
+    promises.push(Auditory.find({}).then((value) => {
+        return {type: 'auditories', name:'Аудитории', icon: 'local_library', value};
     }));
     Promise.all(promises).then(libraries => {
         res.send(libraries);
@@ -34,7 +43,7 @@ exports.get_admin_libraries = (req, res) => {
     const {faculty} = req.params;
     let promises = [];
     promises.push(Admin.find({}).then((value) => {
-        return {type: 'admins', name:'Менеджеры', icon: 'vpn_key', value};
+        return {type: 'admins', name:'Менеджеры и Администраторы', icon: 'vpn_key', value};
     }));
     promises.push(Faculty.find({}).then((value) => {
         return {type: 'faculties', name:'Факультеты', icon: 'work', value};
