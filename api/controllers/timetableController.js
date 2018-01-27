@@ -67,10 +67,9 @@ exports.get_timetable = (req, res) => {
                 model: 'Auditory',
             }], (err, tables) => {
                 const educationLevel = level? level : tables[0].direction.level;
-                const educationCourse = course? course : tables[0].course;
-                let trueTables = tables.filter(table => (
-                    table.direction.level === educationLevel && table.course === educationCourse
-                ));
+                let tablesByLevel = tables.filter(table => table.direction.level === educationLevel);
+                const educationCourse = course? course : tablesByLevel[0] ? tablesByLevel[0].course : 0;
+                let trueTables = tablesByLevel.filter(table => table.course === Number(educationCourse));
                 let times = [];
                 Time.findOne({_id: tables[0].time}, (err, times) => {
                     let outputTimetable = {};
@@ -89,10 +88,12 @@ exports.get_timetable = (req, res) => {
                     }
                     res.json({
                         timetable: outputTimetable,
-                        directions: tables.filter(table => (table.course === educationCourse && table.direction.level === educationLevel)).map(
+                        directions: tables.filter(table => (table.course === Number(educationCourse) && table.direction.level === educationLevel)).map(
                             filtered => filtered.direction.name
                         ),
-                        courses: utils.unique(tables.map(table => table.course)),
+                        courses: tables.filter(table => (table.direction.level === educationLevel)).map(
+                            filtered => filtered.course
+                        ),
                         levels: utils.unique(tables.map(table => table.direction.level)),
                     });
                 })
