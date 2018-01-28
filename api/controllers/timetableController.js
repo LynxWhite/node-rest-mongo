@@ -49,7 +49,7 @@ exports.get_timetable = (req, res) => {
         year,
         semester,
         faculty,
-        }, (err, result) => {
+        }).sort({ 'direction.level': 1, 'course': 1 }).exec((err, result) => {
             Table.populate(result, [{
                 path: 'direction',
                 model: 'Direction',
