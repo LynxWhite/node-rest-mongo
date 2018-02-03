@@ -5,7 +5,10 @@ const mongoose = require('mongoose');
 
 const Time = mongoose.model('Time');
 const Table = mongoose.model('Table');
+const Teacher = mongoose.model('Teacher');
+const Subject = mongoose.model('Subject');
 const Faculty = mongoose.model('Faculty');
+const Auditory = mongoose.model('Auditory');
 const ObjectId = require('mongodb').ObjectID;
 
 const array = {};
@@ -49,7 +52,7 @@ exports.get_timetable = (req, res) => {
         year,
         semester,
         faculty,
-        }).sort({ 'direction.level': 1, 'course': 1 }).exec((err, result) => {
+        }, (err, result) => {
             Table.populate(result, [{
                 path: 'direction',
                 model: 'Direction',
@@ -76,9 +79,9 @@ exports.get_timetable = (req, res) => {
                     for (let day of days) {
                         outputTimetable[day] = times.schedule.map((time, index) => {
                             return [time, ...trueTables.map(table => {
-                                const tableCell = null;
+                                let tableCell = null;
                                 table.cells.forEach(cell => {
-                                    if (cell.time === time && cell.day === day){
+                                    if (cell.number === index && cell.day === day) {
                                         tableCell = cell;
                                     }
                                 })
@@ -89,12 +92,24 @@ exports.get_timetable = (req, res) => {
                     res.json({
                         timetable: outputTimetable,
                         directions: tables.filter(table => (table.course === Number(educationCourse) && table.direction.level === educationLevel)).map(
-                            filtered => filtered.direction.abbr + ' (' + filtered.direction.profile + ')'
+                            filtered => {
+                                return {
+                                    name: filtered.direction.abbr + ' (' + filtered.direction.profile + ')',
+                                    id: filtered.direction._id,
+                                }
+                            }
                         ),
                         courses: tables.filter(table => (table.direction.level === educationLevel)).map(
                             filtered => filtered.course
                         ),
                         levels: utils.unique(tables.map(table => table.direction.level)),
+                        requestParams: {
+                            year,
+                            semester,
+                            faculty,
+                            level: educationLevel,
+                            course: educationCourse,
+                        }
                     });
                 })
             })
@@ -151,4 +166,53 @@ exports.update_timetable = (req, res) => {
             res.send(err);
         res.json(table);
     })
+}
+
+function findElement(arr, day, number) {
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i].day === day && arr[i].number === number) {
+            return i;
+        }
+    }
+    return false;
+ }
+
+exports.add_lesson = (req, res) => {
+    const {table, day, number, lessons} = req.body;
+    delete table.level;
+    const trueLessons = lessons.map(les => {
+        const newLesson = {...les};
+        Teacher.findOne({fio: les.teacher}, (err, teacher) => {
+            newLesson.teacher = teacher ? teacher._id : null;
+        });
+        Subject.findOne({name: les.subject}, (err, subject) => {
+            newLesson.subject = subject ? subject._id : null;
+        });
+        Auditory.findOne({number: les.room}, (err, auditory) => {
+            newLesson.auditory = auditory ? auditory._id : null;
+        });
+        newLesson.subgroup = les.subgroup === 'all' ? 0 : Number(les.subgroup);
+        newLesson.plus_minus = les.plus_minus === false ? '' : les.plus_minus;
+        delete newLesson.room;
+        return newLesson;
+    });
+    Table.findOne(table, (err, foundTable) => {
+        const cellIndex = findElement(foundTable.cells, day, number);
+        if (cellIndex !== false) {
+            foundTable.cells[cellIndex].lessons.push(...trueLessons);
+        } else {
+            foundTable.cells.push({
+                day,
+                number,
+                lessons: trueLessons,
+            })
+        }
+        foundTable.save(function (err, table) {
+            if (err) {
+                console.error(err);
+            } else {
+                res.json({message: 'Ячейка добавлена'});
+            }
+        });
+    });
 }

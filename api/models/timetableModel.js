@@ -48,8 +48,9 @@ const TableSchema = new Schema({
             day: {
                 type: String,
             },
-            comment: {
-                type: String,
+            edited: {
+                type: Date,
+                default: Date.now
             },
             lessons: [
                 {
@@ -64,6 +65,9 @@ const TableSchema = new Schema({
                     auditory: {
                         type: Schema.Types.ObjectId,
                         ref: 'Auditory',
+                    },
+                    comment: {
+                        type: String,
                     },
                     subgroup: {
                         type: Number,

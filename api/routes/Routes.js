@@ -25,6 +25,8 @@ module.exports = (app) => {
         .post(timetable.create_table);
     app.route('/timetable/:year/:semester/:faculty/:level?/:course?')
         .get(timetable.get_timetable);
+    app.route('/timetable/add')
+        .post(timetable.add_lesson);
 //faculty
     app.route('/faculties')
         .get(faculties.list_all_faculties)

@@ -32,7 +32,7 @@ exports.delete_a_direction = (req, res) => {
     Direction.remove({
         _id: req.params.directionId
     }, (err, direction) => {
-        if (err) 
+        if (err)
             res.send(err);
         res.json({message: 'Направление удалено'});
     })
