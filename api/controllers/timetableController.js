@@ -211,7 +211,7 @@ exports.add_lesson = (req, res) => {
             if (err) {
                 console.error(err);
             } else {
-                res.json({message: 'Ячейка добавлена'});
+                res.json({message: 'Пара добавлена в ячейку'});
             }
         });
     });
