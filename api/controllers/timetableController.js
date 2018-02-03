@@ -188,7 +188,7 @@ exports.add_lesson = (req, res) => {
         Subject.findOne({name: les.subject}, (err, subject) => {
             newLesson.subject = subject ? subject._id : null;
         });
-        Auditory.findOne({number: les.room}, (err, auditory) => {
+        Auditory.findOne({name: les.room}, (err, auditory) => {
             newLesson.auditory = auditory ? auditory._id : null;
         });
         newLesson.subgroup = les.subgroup === 'all' ? 0 : Number(les.subgroup);
@@ -215,4 +215,5 @@ exports.add_lesson = (req, res) => {
             }
         });
     });
+    console.log(trueLessons);
 }
