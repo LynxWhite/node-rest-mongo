@@ -180,40 +180,42 @@ function findElement(arr, day, number) {
 exports.add_lesson = (req, res) => {
     const {table, day, number, lessons} = req.body;
     delete table.level;
-    const trueLessons = lessons.map(les => {
+    let newLessons = [];
+    lessons.forEach((les, index) => {
         const newLesson = {...les};
         Teacher.findOne({fio: les.teacher}, (err, teacher) => {
             newLesson.teacher = teacher ? teacher._id : null;
+            Subject.findOne({name: les.subject}, (err, subject) => {
+                newLesson.subject = subject ? subject._id : null;
+                Auditory.findOne({name: les.room.split(' корпус: ')[0], housing: les.room.split(' корпус: ')[1]}, (err, auditory) => {
+                    newLesson.auditory = auditory ? auditory._id : null;
+                    newLesson.subgroup = les.subgroup === 'all' ? 0 : Number(les.subgroup);
+                    newLesson.plus_minus = les.plus_minus === false ? '' : les.plus_minus;
+                    delete newLesson.room;
+                    newLessons.push(newLesson);
+                    if (index === lessons.length - 1) {
+                        Table.findOne(table, (err, foundTable) => {
+                            const cellIndex = findElement(foundTable.cells, day, number);
+                            if (cellIndex !== false) {
+                                foundTable.cells[cellIndex].lessons.push(...newLessons);
+                            } else {
+                                foundTable.cells.push({
+                                    day,
+                                    number,
+                                    lessons: newLessons,
+                                })
+                            }
+                            foundTable.save(function (err, table) {
+                                if (err) {
+                                    console.error(err);
+                                } else {
+                                    res.json({message: 'Пара добавлена в ячейку'});
+                                }
+                            });
+                        });
+                    }
+                });
+            });
         });
-        Subject.findOne({name: les.subject}, (err, subject) => {
-            newLesson.subject = subject ? subject._id : null;
-        });
-        Auditory.findOne({name: les.room}, (err, auditory) => {
-            newLesson.auditory = auditory ? auditory._id : null;
-        });
-        newLesson.subgroup = les.subgroup === 'all' ? 0 : Number(les.subgroup);
-        newLesson.plus_minus = les.plus_minus === false ? '' : les.plus_minus;
-        delete newLesson.room;
-        return newLesson;
-    });
-    Table.findOne(table, (err, foundTable) => {
-        const cellIndex = findElement(foundTable.cells, day, number);
-        if (cellIndex !== false) {
-            foundTable.cells[cellIndex].lessons.push(...trueLessons);
-        } else {
-            foundTable.cells.push({
-                day,
-                number,
-                lessons: trueLessons,
-            })
-        }
-        foundTable.save(function (err, table) {
-            if (err) {
-                console.error(err);
-            } else {
-                res.json({message: 'Пара добавлена в ячейку'});
-            }
-        });
-    });
-    console.log(trueLessons);
+    })
 }
