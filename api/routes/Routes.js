@@ -27,6 +27,8 @@ module.exports = (app) => {
         .get(timetable.get_timetable);
     app.route('/timetable/add')
         .post(timetable.add_lesson);
+    app.route('/lesson/:lesson')
+        .delete(timetable.remove_lesson);
 //faculty
     app.route('/faculties')
         .get(faculties.list_all_faculties)

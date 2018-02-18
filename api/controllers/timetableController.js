@@ -219,3 +219,17 @@ exports.add_lesson = (req, res) => {
         });
     })
 }
+
+exports.remove_lesson = (req, res) => {
+    const {lesson} = req.params;
+    Table.findOneAndUpdate(
+        {'cells.lessons': {$elemMatch: {_id: lesson}}},
+        { $pull: { 'cells.$.lessons': { _id: lesson }}},
+        (err, foundTable) => {
+        if (err) {
+            console.error(err);
+        } else {
+            res.json({message: 'Пара удалена из ячейки'});
+        }
+    });
+}
