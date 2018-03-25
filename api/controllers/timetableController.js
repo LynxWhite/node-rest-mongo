@@ -187,7 +187,7 @@ exports.add_lesson = (req, res) => {
             newLesson.teacher = teacher ? teacher._id : null;
             Subject.findOne({name: les.subject}, (err, subject) => {
                 newLesson.subject = subject ? subject._id : null;
-                Auditory.findOne({name: les.room.split(' корпус: ')[0], housing: les.room.split(' корпус: ')[1]}, (err, auditory) => {
+                Auditory.findOne({name: les.auditory && les.auditory.split(' корпус: ')[0], housing: les.auditory && les.auditory.split(' корпус: ')[1]}, (err, auditory) => {
                     newLesson.auditory = auditory ? auditory._id : null;
                     newLesson.subgroup = les.subgroup === 'all' ? 0 : Number(les.subgroup);
                     newLesson.plus_minus = les.plus_minus === false ? '' : les.plus_minus;
