@@ -8,6 +8,7 @@ const Table = mongoose.model('Table');
 const Teacher = mongoose.model('Teacher');
 const Subject = mongoose.model('Subject');
 const Faculty = mongoose.model('Faculty');
+const Direction = mongoose.model('Direction');
 const Auditory = mongoose.model('Auditory');
 const ObjectId = require('mongodb').ObjectID;
 
@@ -36,6 +37,8 @@ exports.create_table = (req, res) => {
                 time,
                 cells: [],
             });
+            Faculty.findOneAndUpdate({_id: faculty}, { $inc: { used: 1 } });
+            Direction.findOneAndUpdate({_id: direction}, { $inc: { used: 1 } });
             new_table.save((err, table) => {
                 if (err)
                     res.send(err);
@@ -145,8 +148,13 @@ exports.get_timetables = (req, res) => {
 };
 
 exports.delete_timetable = (req, res) => {
+    Table.findById(req.params.tableId, (err, table) => {
+        const { faculty, direction } = table;
+        Faculty.findOneAndUpdate({_id: faculty}, { $inc: { used: -1 } });
+        Direction.findOneAndUpdate({_id: direction}, { $inc: { used: -1 } });
+    })
     Table.remove({
-        _id: req.params.tableId
+        _id: req.params.tableId,
     }, (err, timetable) => {
         if (err)
             res.send(err);
@@ -182,12 +190,12 @@ exports.add_lesson = (req, res) => {
     delete table.level;
     let newLessons = [];
     lessons.forEach((les, index) => {
-        const newLesson = {...les};
-        Teacher.findOne({fio: les.teacher}, (err, teacher) => {
+        const newLesson = {...les, _id: mongoose.Types.ObjectId()};
+        Teacher.findOneAndUpdate({fio: les.teacher}, { $inc: { used: 1 } }, (err, teacher) => {
             newLesson.teacher = teacher ? teacher._id : null;
-            Subject.findOne({name: les.subject}, (err, subject) => {
+            Subject.findOneAndUpdate({name: les.subject}, { $inc: { used: 1 } }, (err, subject) => {
                 newLesson.subject = subject ? subject._id : null;
-                Auditory.findOne({name: les.auditory && les.auditory.split(' корпус: ')[0], housing: les.auditory && les.auditory.split(' корпус: ')[1]}, (err, auditory) => {
+                Auditory.findOneAndUpdate({name: les.auditory && les.auditory.split(' корпус: ')[0], housing: les.auditory && les.auditory.split(' корпус: ')[1]}, { $inc: { used: 1 } }, (err, auditory) => {
                     newLesson.auditory = auditory ? auditory._id : null;
                     newLesson.subgroup = les.subgroup === 'all' ? 0 : Number(les.subgroup);
                     newLesson.plus_minus = les.plus_minus === false ? '' : les.plus_minus;
@@ -222,9 +230,23 @@ exports.add_lesson = (req, res) => {
 
 exports.remove_lesson = (req, res) => {
     const {lesson} = req.params;
+    Table.findOne(
+        { 'cells.lessons': {$elemMatch: { _id: lesson }} }
+    ).populate('cells.lessons').exec((err, foundTable) => {
+        foundTable.cells.forEach(cell => {
+            cell.lessons.forEach(less => {
+                if(less._id.toString() === lesson) {
+                    const { subject, teacher, auditory } = less;
+                    Subject.findOneAndUpdate({_id: subject}, { $inc: { used: -1 } });
+                    Teacher.findOneAndUpdate({_id: teacher}, { $inc: { used: -1 } });
+                    Auditory.findOneAndUpdate({_id: auditory}, { $inc: { used: -1 } });
+                }
+            })
+        })
+    });
     Table.findOneAndUpdate(
-        {'cells.lessons': {$elemMatch: {_id: lesson}}},
-        { $pull: { 'cells.$.lessons': { _id: lesson }}},
+        { 'cells.lessons': {$elemMatch: { _id: lesson }} },
+        { $pull: { 'cells.$.lessons': { _id: lesson }} },
         (err, foundTable) => {
         if (err) {
             console.error(err);
