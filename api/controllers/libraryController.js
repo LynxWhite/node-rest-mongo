@@ -31,10 +31,10 @@ exports.get_manager_libraries = (req, res) => {
         promises.push(Subject.find({faculty}).then((value) => {
             return {type: 'subjects', name:'Предметы', icon: 'assignment', value};
         }));
-        promises.push(Auditory.find({}).sort({housing: 1}).then((auditories) => {
+        promises.push(Auditory.find({}).sort({housing: 1, name: 1}).then((auditories) => {
             let value = [...auditories];
             auditories.forEach((auditory, index) => {
-                if (auditory.housing === fac.favouriteHousing) {
+                if (fac && auditory.housing === fac.favouriteHousing) {
                     value.splice(0, 0, value.splice(index, 1)[0]);
                 };
             });
@@ -66,10 +66,10 @@ exports.get_admin_libraries = (req, res) => {
         promises.push(Subject.find(faculty ? {faculty: faculty} : '').sort({faculty: 1, name: 1}).then((value) => {
             return {type: 'subjects', name:'Предметы', icon: 'assignment', value};
         }));
-        promises.push(Auditory.find({}).sort({housing: 1}).then((auditories) => {
+        promises.push(Auditory.find({}).sort({housing: 1, name: 1}).then((auditories) => {
             let value = [...auditories];
             auditories.forEach((auditory, index) => {
-                if (auditory.housing === fac.favouriteHousing) {
+                if (fac && auditory.housing === fac.favouriteHousing) {
                     value.splice(0, 0, value.splice(index, 1)[0]);
                 };
             });
