@@ -93,6 +93,9 @@ const FacultySchema = new Schema({
     abbr: {
         type: String
     },
+    favouriteHousing: {
+        type: String,
+    },
     used: {
         type: Number,
         default: 0,
