@@ -49,25 +49,34 @@ exports.get_manager_libraries = (req, res) => {
 exports.get_admin_libraries = (req, res) => {
     const {faculty} = req.params;
     let promises = [];
-    promises.push(Admin.find({}).then((value) => {
-        return {type: 'admins', name:'Менеджеры и Администраторы', icon: 'vpn_key', value};
-    }));
-    promises.push(Faculty.find({}).then((value) => {
-        return {type: 'faculties', name:'Факультеты', icon: 'work', value};
-    }));
-    promises.push(Direction.find(faculty ? {faculty: faculty} : '').sort({level: 1, code: 1, profile: 1}).then((value) => {
-        return {type: 'directions', name:'Направления', icon: 'directions', value};
-    }));
-    promises.push(Teacher.find(faculty ? {faculty: faculty} : '').sort({fio:1}).then((value) => {
-        return {type: 'teachers', name:'Преподаватели', icon: 'group', value};
-    }));
-    promises.push(Subject.find(faculty ? {faculty: faculty} : '').sort({faculty: 1, name: 1}).then((value) => {
-        return {type: 'subjects', name:'Предметы', icon: 'assignment', value};
-    }));
-    promises.push(Auditory.find({}).then((value) => {
-        return {type: 'auditories', name:'Аудитории', icon: 'local_library', value};
-    }));
-    Promise.all(promises).then(libraries => {
-        res.send(libraries);
-    })
+
+    Faculty.findById(faculty, (err, fac) => {
+        promises.push(Admin.find({}).then((value) => {
+            return {type: 'admins', name:'Менеджеры и Администраторы', icon: 'vpn_key', value};
+        }));
+        promises.push(Faculty.find({}).then((value) => {
+            return {type: 'faculties', name:'Факультеты', icon: 'work', value};
+        }));
+        promises.push(Direction.find(faculty ? {faculty: faculty} : '').sort({level: 1, code: 1, profile: 1}).then((value) => {
+            return {type: 'directions', name:'Направления', icon: 'directions', value};
+        }));
+        promises.push(Teacher.find(faculty ? {faculty: faculty} : '').sort({fio:1}).then((value) => {
+            return {type: 'teachers', name:'Преподаватели', icon: 'group', value};
+        }));
+        promises.push(Subject.find(faculty ? {faculty: faculty} : '').sort({faculty: 1, name: 1}).then((value) => {
+            return {type: 'subjects', name:'Предметы', icon: 'assignment', value};
+        }));
+        promises.push(Auditory.find({}).sort({housing: 1}).then((auditories) => {
+            let value = [...auditories];
+            auditories.forEach((auditory, index) => {
+                if (auditory.housing === fac.favouriteHousing) {
+                    value.splice(0, 0, value.splice(index, 1)[0]);
+                };
+            });
+            return {type: 'auditories', name:'Аудитории', icon: 'local_library', value};
+        }));
+        Promise.all(promises).then(libraries => {
+            res.send(libraries);
+        });
+    });
 };
