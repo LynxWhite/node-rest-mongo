@@ -99,6 +99,10 @@ exports.get_timetable = (req, res) => {
                                 return {
                                     name: filtered.direction.abbr + ' (' + filtered.direction.profile + ')',
                                     id: filtered.direction._id,
+                                    abbr: filtered.direction.abbr,
+                                    profile: filtered.direction.profile,
+                                    code: filtered.direction.code,
+                                    showName: filtered.direction.name,
                                 }
                             }
                         ),
