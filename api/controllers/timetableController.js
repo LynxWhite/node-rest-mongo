@@ -193,6 +193,7 @@ exports.add_lesson = (req, res) => {
     const { table, day, number, lessons } = req.body;
     delete table.level;
     let newLessons = [];
+
     lessons.forEach((les, index) => {
         const newLesson = { ...les, _id: mongoose.Types.ObjectId() };
         Teacher.findOneAndUpdate({ fio: les.teacher }, { $inc: { used: 1 } }, (err, teacher) => {
@@ -221,7 +222,9 @@ exports.add_lesson = (req, res) => {
                                 if (err) {
                                     console.error(err);
                                 } else {
-                                    res.json({ message: 'Пара добавлена в ячейку' });
+                                    if (res) {
+                                        res.json({ message: 'Пара добавлена в ячейку' });
+                                    }
                                 }
                             });
                         });
@@ -232,21 +235,67 @@ exports.add_lesson = (req, res) => {
     })
 }
 
+exports.update_lesson = (req, res) => {
+    const { table, day, number, id } = req.body;
+    delete table.level;
+    Table.findOne(
+        { 'cells.lessons': { $elemMatch: { _id: id } } }
+    ).populate('cells.lessons').exec((err, foundTable) => {
+        if (foundTable) {
+            foundTable.cells.forEach(cell => {
+                cell.lessons.forEach(less => {
+                    if (String(less._id) === id) {
+                        Table.findOneAndUpdate(
+                            { 'cells.lessons': { $elemMatch: { _id: less._id } } },
+                            { $pull: { 'cells.$.lessons': { _id: less._id } } },
+                            (err) => {
+                                Table.findOne(table, (err, tt) => {
+                                    const cellIndex = findElement(tt.cells, day, number);
+                                    if (cellIndex !== false) {
+                                        tt.cells[cellIndex].lessons.push(less);
+                                    } else {
+                                        tt.cells.push({
+                                            day,
+                                            number,
+                                            lessons: [less],
+                                        })
+                                    }
+                                    tt.save(function(err, table) {
+                                        if (err) {
+                                            console.error(err);
+                                        } else {
+                                            res.json({ message: 'Пара перемещена в другую ячейку' });
+                                        }
+                                    });
+                                });
+                            });
+                    }
+                })
+            })
+        } else {
+            res.status(400).send({ error: err })
+        }
+    });
+}
+
 exports.remove_lesson = (req, res) => {
     const { lesson } = req.params;
+
     Table.findOne(
         { 'cells.lessons': { $elemMatch: { _id: lesson } } }
     ).populate('cells.lessons').exec((err, foundTable) => {
-        foundTable.cells.forEach(cell => {
-            cell.lessons.forEach(less => {
-                if (less._id.toString() === lesson) {
-                    const { subject, teacher, auditory } = less;
-                    Subject.findOneAndUpdate({ _id: subject }, { $inc: { used: -1 } });
-                    Teacher.findOneAndUpdate({ _id: teacher }, { $inc: { used: -1 } });
-                    Auditory.findOneAndUpdate({ _id: auditory }, { $inc: { used: -1 } });
-                }
+        if (foundTable) {
+            foundTable.cells.forEach(cell => {
+                cell.lessons.forEach(less => {
+                    if (less._id.toString() === lesson) {
+                        const { subject, teacher, auditory } = less;
+                        Subject.findOneAndUpdate({ _id: subject }, { $inc: { used: -1 } });
+                        Teacher.findOneAndUpdate({ _id: teacher }, { $inc: { used: -1 } });
+                        Auditory.findOneAndUpdate({ _id: auditory }, { $inc: { used: -1 } });
+                    }
+                })
             })
-        })
+        }
     });
     Table.findOneAndUpdate(
         { 'cells.lessons': { $elemMatch: { _id: lesson } } },

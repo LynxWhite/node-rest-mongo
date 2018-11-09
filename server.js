@@ -11,7 +11,7 @@ const jwt = require('jwt-simple')
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
 
-const db_url = process.env.MONGODB_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/TimeTabledb'
+const db_url = process.env.MONGODB_URL || process.env.MONGOLAB_URI || 'mongodb://admin:Admin!@81.177.142.218/timetableDb?authSource=admin'
 mongoose.connect(db_url, { useMongoClient: true }, () => {
     console.log('MongoDB connected sucessfully')
 })
@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 
 app.use((req, res, next) => {
     if ((req.method === 'POST' || req.method === 'DELETE' || req.method === 'PUT') && req.originalUrl !== '/login') {
-        if (!req.headers['x-auth']) { return res.sendStatus(401)}
+        if (!req.headers['x-auth']) { return res.sendStatus(401) }
         try {
             const login = jwt.decode(req.headers['x-auth'], config.secretkey).login;
         } catch (err) {
@@ -40,9 +40,9 @@ routes(app)
 app.use((req, res) => {
     if (req.method === 'OPTIONS') {
         res.sendStatus(200);
-    } else res.status(404).send({url: req.originalUrl + ' not found'})
+    } else res.status(404).send({ url: req.originalUrl + ' not found' })
 });
 
 app.listen(port);
 
-console.log('todo list RESTful API server started on: ' + port);
+console.log('RESTful API server started on: ' + port);
