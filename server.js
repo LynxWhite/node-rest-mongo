@@ -11,7 +11,7 @@ const jwt = require('jwt-simple')
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
 
-const db_url = process.env.MONGODB_URL || process.env.MONGOLAB_URI || 'mongodb://admin:Admin!@81.177.142.218/timetableDb?authSource=admin'
+const db_url = process.env.MONGODB_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/TimeTabledb'
 mongoose.connect(db_url, { useMongoClient: true }, () => {
     console.log('MongoDB connected sucessfully')
 })
